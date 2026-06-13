@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>赛博家电 · 知识库导航</title>
+    <style>
+        :root {
+            --bg: #0d0d1a;
+            --card: #16162a;
+            --border: #2a2a4a;
+            --accent: #e74c3c;
+            --accent2: #f39c12;
+            --text: #e0e0f0;
+            --muted: #7a7a8a;
+            --green: #2ecc71;
+            --blue: #3498db;
+            --purple: #9b59b6;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+        }
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #1a1a3e 0%, #0d0d2a 100%);
+            border-bottom: 1px solid var(--border);
+            padding: 2rem 1.5rem 1.5rem;
+            text-align: center;
+        }
+        .header h1 {
+            font-size: clamp(1.4rem, 3vw, 2rem);
+            font-weight: 700;
+            background: linear-gradient(90deg, var(--accent), var(--accent2));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .header p {
+            color: var(--muted);
+            font-size: 0.85rem;
+            margin-top: 0.4rem;
+        }
+        /* Search */
+        .search-wrap {
+            max-width: 600px;
+            margin: 1.2rem auto 0;
+            position: relative;
+        }
+        .search-wrap input {
+            width: 100%;
+            padding: 0.65rem 1rem 0.65rem 2.5rem;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            background: var(--card);
+            color: var(--text);
+            font-size: 0.88rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .search-wrap input:focus { border-color: var(--accent); }
+        .search-wrap .icon {
+            position: absolute;
+            left: 0.8rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--muted);
+            font-size: 0.9rem;
+        }
+        /* Filters */
+        .filters {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            padding: 1rem 1.5rem 0;
+        }
+        .filter-btn {
+            padding: 0.35rem 1rem;
+            border-radius: 50px;
+            border: 1px solid var(--border);
+            background: transparent;
+            color: var(--muted);
+            font-size: 0.78rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .filter-btn:hover, .filter-btn.active {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: #fff;
+        }
+        /* Grid */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1.5rem;
+        }
+        .card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 1.2rem;
+            transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+            position: relative;
+            overflow: hidden;
+        }
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            border-radius: 14px 14px 0 0;
+        }
+        .card.sop::before { background: linear-gradient(90deg, var(--accent), #ff6b6b); }
+        .card.plan::before { background: linear-gradient(90deg, var(--blue), #00d4ff); }
+        .card.report::before { background: linear-gradient(90deg, var(--purple), #e056a0); }
+        .card.workflow::before { background: linear-gradient(90deg, var(--accent2), #f0c040); }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+            border-color: rgba(255,255,255,0.08);
+        }
+        .card-icon {
+            width: 40px; height: 40px;
+            border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.2rem;
+            margin-bottom: 0.7rem;
+        }
+        .card.sop .card-icon { background: rgba(231,76,60,0.15); }
+        .card.plan .card-icon { background: rgba(52,152,219,0.15); }
+        .card.report .card-icon { background: rgba(155,89,182,0.15); }
+        .card.workflow .card-icon { background: rgba(243,156,18,0.15); }
+
+        .card-tag {
+            display: inline-block;
+            font-size: 0.68rem;
+            padding: 0.15rem 0.5rem;
+            border-radius: 4px;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        .card.sop .card-tag { background: rgba(231,76,60,0.15); color: #e74c3c; }
+        .card.plan .card-tag { background: rgba(52,152,219,0.15); color: #5dade2; }
+        .card.report .card-tag { background: rgba(155,89,182,0.15); color: #c39bd3; }
+        .card.workflow .card-tag { background: rgba(243,156,18,0.15); color: #f0c040; }
+
+        .card h3 {
+            font-size: 0.92rem;
+            font-weight: 600;
+            line-height: 1.4;
+            margin-bottom: 0.4rem;
+        }
+        .card p {
+            font-size: 0.78rem;
+            color: var(--muted);
+            line-height: 1.5;
+        }
+        .card-meta {
+            display: flex;
+            gap: 0.8rem;
+            margin-top: 0.7rem;
+            font-size: 0.7rem;
+            color: var(--muted);
+        }
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 2rem 1rem;
+            color: var(--muted);
+            font-size: 0.75rem;
+            border-top: 1px solid var(--border);
+        }
+        .hidden { display: none !important; }
+        /* Platform links */
+        .platform-links {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            padding: 0.5rem 1.5rem 0;
+        }
+        .platform-link {
+            font-size: 0.78rem;
+            color: var(--muted);
+            text-decoration: none;
+            padding: 0.3rem 0.8rem;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+            transition: all 0.2s;
+        }
+        .platform-link:hover { color: var(--text); border-color: rgba(255,255,255,0.15); }
+        @media (max-width: 600px) {
+            .grid { grid-template-columns: 1fr; padding: 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <h1>赛博家电 · 知识库导航</h1>
+    <p>大学生轻薄本测评 SOP + 家电数码内容策划全集</p>
+    <div class="search-wrap">
+        <span class="icon">🔍</span>
+        <input type="text" id="search" placeholder="搜索文档...">
+    </div>
+    <div class="platform-links">
+        <a class="platform-link" href="https://laptop-review-sop.pages.dev" target="_blank">🌐 Cloudflare Pages</a>
+        <a class="platform-link" href="https://zocaair.github.io/laptop-review-sop/" target="_blank">🐙 GitHub Pages</a>
+    </div>
+</div>
+
+<div class="filters">
+    <button class="filter-btn active" data-filter="all">全部</button>
+    <button class="filter-btn" data-filter="sop">SOP 指南</button>
+    <button class="filter-btn" data-filter="plan">项目策划</button>
+    <button class="filter-btn" data-filter="report">行业报告</button>
+    <button class="filter-btn" data-filter="workflow">工作流</button>
+</div>
+
+<div class="grid" id="grid">
+
+    <!-- 首页 -->
+    <a class="card plan" href="index.html" target="_blank">
+        <div class="card-icon">📘</div>
+        <span class="card-tag">SOP 指南</span>
+        <h3>大学生轻薄本测评 SOP 指南</h3>
+        <p>面向大学生群体的轻薄本测评标准执行流程</p>
+        <div class="card-meta"><span>📄 HTML</span><span>🕐 入门指南</span></div>
+    </a>
+
+    <!-- SOP 指南 -->
+    <a class="card sop" href="sop-longvideo.html" target="_blank">
+        <div class="card-icon">🎬</div>
+        <span class="card-tag">SOP 指南</span>
+        <h3>家电数码长视频 SOP（YouTube + B站）</h3>
+        <p>长视频内容制作标准流程，覆盖 YouTube 与 B站双平台</p>
+        <div class="card-meta"><span>📄 HTML</span><span>🕐 10 min</span></div>
+    </a>
+
+    <a class="card sop" href="sop-hometheater.html" target="_blank">
+        <div class="card-icon">🎦</div>
+        <span class="card-tag">SOP 指南</span>
+        <h3>家庭影院测评内容 SOP 与商务开发报告</h3>
+        <p>家庭影院测评标准流程及商务合作框架</p>
+        <div class="card-meta"><span>📄 HTML</span></div>
+    </a>
+
+    <a class="card sop" href="sop-fridge.html" target="_blank">
+        <div class="card-icon">❄️</div>
+        <span class="card-tag">SOP 指南</span>
+        <h3>冰箱测评内容 SOP 与商务开发报告</h3>
+        <p>冰箱品类测评标准 + 商务开发策略</p>
+        <div class="card-meta"><span>📄 HTML</span></div>
+    </a>
+
+    <a class="card sop" href="sop-aircon.html" target="_blank">
+        <div class="card-icon">❄️</div>
+        <span class="card-tag">SOP 指南</span>
+        <h3>空调测评内容 SOP 与商务开发报告</h3>
+        <p>空调测评标准执行流程及品牌合作指南</p>
+        <div class="card-meta"><span>📄 HTML</span></div>
+    </a>
+
+    <a class="card sop" href="sop-robot.html" target="_blank">
+        <div class="card-icon">🤖</div>
+        <span class="card-tag">SOP 指南</span>
+        <h3>扫地机器人测评内容 SOP 与商务开发报告</h3>
+        <p>扫地机器人测评标准 + 商务开发材料清单</p>
+        <div class="card-meta"><span>📄 HTML</span></div>
+    </a>
+
+    <a class="card sop" href="sop-tv.html" target="_blank">
+        <div class="card-icon">📺</div>
+        <span class="card-tag">SOP 指南</span>
+        <h3>电视机测评内容 SOP 与商务开发材料清单</h3>
+        <p>电视测评标准体系 + 商务材料模板</p>
+        <div class="card-meta"><span>📄 HTML</span></div>
+    </a>
+
+    <a class="card sop" href="sop-system.html" target="_blank">
+        <div class="card-icon">📋</div>
+        <span class="card-tag">SOP 指南</span>
+        <h3>数码与家电产品测评体系清单 v1.0</h3>
+        <p>全品类测评指标体系总览</p>
+        <div class="card-meta"><span>📄 HTML</span></div>
+    </a>
+
+    <!-- 项目策划 -->
+    <a class="card plan" href="plan-hometheater.html" target="_blank">
+        <div class="card-icon">🎦</div>
+        <span class="card-tag">项目策划</span>
+        <h3>2026年下半年 · 家庭影院长视频项目策划</h3>
+        <p>家庭影院品类下半年内容规划与执行方案</p>
+        <div class="card-meta"><span>📄 HTML</span><span>📅 2026 H2</span></div>
+    </a>
+
+    <a class="card plan" href="plan-oven.html" target="_blank">
+        <div class="card-icon">🍳</div>
+        <span class="card-tag">项目策划</span>
+        <h3>2026年下半年 · 蒸烤箱长视频项目策划</h3>
+        <p>蒸烤箱品类长视频内容策划方案</p>
+        <div class="card-meta"><span>📄 HTML</span><span>📅 2026 H2</span></div>
+    </a>
+
+    <a class="card plan" href="plan-aircon.html" target="_blank">
+        <div class="card-icon">❄️</div>
+        <span class="card-tag">项目策划</span>
+        <h3>2026年下半年 · 空调长视频项目策划</h3>
+        <p>空调品类下半年长视频项目完整策划报告</p>
+        <div class="card-meta"><span>📄 HTML</span><span>📅 2026 H2</span></div>
+    </a>
+
+    <a class="card plan" href="plan-fridge.html" target="_blank">
+        <div class="card-icon">🧊</div>
+        <span class="card-tag">项目策划</span>
+        <h3>2026年下半年 · 冰箱长视频项目策划</h3>
+        <p>冰箱品类下半年内容项目策划报告</p>
+        <div class="card-meta"><span>📄 HTML</span><span>📅 2026 H2</span></div>
+    </a>
+
+    <a class="card plan" href="plan-tv.html" target="_blank">
+        <div class="card-icon">📺</div>
+        <span class="card-tag">项目策划</span>
+        <h3>2026年下半年 · 电视长视频项目策划</h3>
+        <p>电视品类下半年长视频项目策划报告</p>
+        <div class="card-meta"><span>📄 HTML</span><span>📅 2026 H2</span></div>
+    </a>
+
+    <a class="card plan" href="plan-robot.html" target="_blank">
+        <div class="card-icon">🤖</div>
+        <span class="card-tag">项目策划</span>
+        <h3>2026年下半年 · 扫地机器人长视频项目策划</h3>
+        <p>扫地机器人品类下半年项目策划报告</p>
+        <div class="card-meta"><span>📄 HTML</span><span>📅 2026 H2</span></div>
+    </a>
+
+    <a class="card plan" href="plan-robot-overall.html" target="_blank">
+        <div class="card-icon">🤖</div>
+        <span class="card-tag">项目策划</span>
+        <h3>2026年下半年 · 扫地机器人长视频整体项目策划</h3>
+        <p>扫地机器人整体项目顶层设计与执行规划</p>
+        <div class="card-meta"><span>📄 HTML</span><span>📅 2026 H2</span></div>
+    </a>
+
+    <a class="card plan" href="plan-tv-overall.html" target="_blank">
+        <div class="card-icon">📺</div>
+        <span class="card-tag">项目策划</span>
+        <h3>2026年下半年 · 电视长视频整体项目策划</h3>
+        <p>电视品类整体项目顶层设计与执行规划</p>
+        <div class="card-meta"><span>📄 HTML</span><span>📅 2026 H2</span></div>
+    </a>
+
+    <!-- 行业报告（新增） -->
+    <a class="card report" href="report-social-ecommerce.html" target="_blank">
+        <div class="card-icon">📊</div>
+        <span class="card-tag">行业报告</span>
+        <h3>2025-2026年家电行业社交电商数据报告</h3>
+        <p>覆盖抖音电商、小红书、B站三大平台，带货GMV、商单投放、用户画像、品类表现与趋势洞察</p>
+        <div class="card-meta"><span>📄 HTML</span><span>📅 2026.06</span></div>
+    </a>
+
+    <!-- 工作流 -->
+    <a class="card workflow" href="bilibili-workflow.html" target="_blank">
+        <div class="card-icon">▶️</div>
+        <span class="card-tag">工作流</span>
+        <h3>B站数码家电博主标准执行流程报告</h3>
+        <p>B站内容创作标准执行流程与规范</p>
+        <div class="card-meta"><span>📄 HTML</span></div>
+    </a>
+
+</div>
+
+<div class="footer">
+    <p>赛博家电 · 知识库 | 最后更新：2026年6月</p>
+    <p style="margin-top:0.4rem; font-size:0.68rem; color:#555;">Hosted on GitHub Pages & Cloudflare Pages · 全球可访问</p>
+</div>
+
+<script>
+    // Search
+    const searchInput = document.getElementById('search');
+    const grid = document.getElementById('grid');
+    const cards = grid.querySelectorAll('.card');
+
+    searchInput.addEventListener('input', function() {
+        const q = this.value.toLowerCase().trim();
+        cards.forEach(card => {
+            const text = (card.querySelector('h3')?.textContent + ' ' + card.querySelector('p')?.textContent).toLowerCase();
+            card.classList.toggle('hidden', q && !text.includes(q));
+        });
+    });
+
+    // Filters
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            const filter = this.dataset.filter;
+            cards.forEach(card => {
+                if (filter === 'all') {
+                    card.classList.remove('hidden');
+                } else {
+                    card.classList.toggle('hidden', !card.classList.contains(filter));
+                }
+            });
+        });
+    });
+</script>
+</body>
+</html>
