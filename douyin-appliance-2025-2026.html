@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>抖音家电品牌商单投放报告 2025-2026</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    background: #F1EFE8;
+    color: #2C2C2A;
+    font-size: 13px;
+    line-height: 1.6;
+    font-weight: 400;
+  }
+  .container { max-width: 1100px; margin: 0 auto; padding: 32px 24px 64px; }
+  h1 { font-size: 22px; font-weight: 500; margin-bottom: 4px; }
+  .subtitle { font-size: 13px; color: #888780; margin-bottom: 32px; }
+  h2 { font-size: 15px; font-weight: 500; margin: 28px 0 16px; color: #2C2C2A; border-bottom: 0.5px solid #D3D1C7; padding-bottom: 8px; }
+  h3 { font-size: 14px; font-weight: 500; margin: 20px 0 12px; color: #2C2C2A; }
+
+  .metric-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+    margin-bottom: 28px;
+  }
+  .metric-card {
+    background: #F1EFE8;
+    border-radius: 8px;
+    padding: 16px 18px;
+  }
+  .metric-label { font-size: 12px; color: #888780; margin-bottom: 6px; }
+  .metric-value { font-size: 28px; font-weight: 500; color: #2C2C2A; }
+  .metric-source { font-size: 11px; color: #B4B2A9; margin-top: 6px; }
+
+  .section-card {
+    background: #fff;
+    border: 0.5px solid #D3D1C7;
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-bottom: 20px;
+  }
+
+  .brand-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  .brand-card {
+    background: #F1EFE8;
+    border-radius: 8px;
+    padding: 14px 16px;
+  }
+  .brand-name { font-size: 14px; font-weight: 500; margin-bottom: 4px; }
+  .brand-desc { font-size: 12px; color: #888780; }
+  .brand-tag { display: inline-block; font-size: 11px; color: #712B13; background: #FAECE7; border-radius: 4px; padding: 2px 8px; margin-top: 6px; }
+
+  .data-bar-container { margin-bottom: 12px; }
+  .data-bar-label { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 4px; }
+  .data-bar-track { height: 8px; background: #D3D1C7; border-radius: 4px; overflow: hidden; }
+  .data-bar-fill { height: 100%; border-radius: 4px; transition: width 0.6s ease; }
+
+  .chart-container { position: relative; width: 100%; height: 300px; margin: 16px 0; }
+  .chart-row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin: 16px 0; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th { text-align: left; padding: 8px 12px; font-weight: 500; font-size: 13px; color: #888780; border-bottom: 0.5px solid #D3D1C7; }
+  td { padding: 10px 12px; border-bottom: 0.5px solid #D3D1C7; }
+  tr:last-child td { border-bottom: none; }
+
+  .source-note { font-size: 11px; color: #B4B2A9; margin-top: 12px; padding-top: 10px; border-top: 0.5px solid #D3D1C7; }
+  .source-note b { color: #888780; }
+
+  .tag { display: inline-block; font-size: 11px; padding: 2px 8px; border-radius: 4px; margin-right: 6px; }
+  .tag-blue { background: #E6F1FB; color: #0C447C; }
+  .tag-green { background: #EAF3DE; color: #27500A; }
+  .tag-amber { background: #FAEEDA; color: #633806; }
+  .tag-red { background: #FCEBEB; color: #791F1F; }
+  .tag-gray { background: #F1EFE8; color: #5F5E5A; }
+
+  .progress-dot { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+  .progress-circle { width: 36px; height: 36px; border-radius: 50%; background: #E6F1FB; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 500; color: #185FA5; flex-shrink: 0; }
+  .progress-line { width: 24px; height: 0.5px; background: #D3D1C7; flex-shrink: 0; }
+
+  .two-col { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+  .three-col { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+
+  .insight-box { background: #E6F1FB; border-radius: 8px; padding: 14px 16px; margin: 16px 0; font-size: 13px; color: #0C447C; }
+  .warn-box { background: #FAECE7; border-radius: 8px; padding: 14px 16px; margin: 16px 0; font-size: 13px; color: #712B13; }
+
+  .budget-card { background: #F1EFE8; border-radius: 8px; padding: 12px 14px; }
+  .budget-range { font-size: 15px; font-weight: 500; color: #2C2C2A; margin: 4px 0; }
+  .budget-desc { font-size: 11px; color: #888780; }
+
+  .footer { font-size: 11px; color: #B4B2A9; text-align: right; margin-top: 40px; padding-top: 16px; border-top: 0.5px solid #D3D1C7; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <h1>抖音家电品牌商单投放报告</h1>
+  <p class="subtitle">电视 · 扫地机器人专项分析 &nbsp;|&nbsp; 数据周期 2025 - 2026 &nbsp;|&nbsp; 报告日期 2026年6月13日</p>
+
+  <!-- Section 1: Overview Metrics -->
+  <h2>核心数据总览</h2>
+  <div class="metric-grid">
+    <div class="metric-card">
+      <div class="metric-label">抖音家电 GMV 同比增速</div>
+      <div class="metric-value" style="color: #185FA5;">67%</div>
+      <div class="metric-source">2024全年 · 来源：巨量引擎家电白皮书</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">种草后一周内购买转化率</div>
+      <div class="metric-value" style="color: #0F6E56;">46%</div>
+      <div class="metric-source">家电消费者 · 2024年 · 巨量引擎白皮书</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">头部品牌单平台年预算（估算）</div>
+      <div class="metric-value" style="color: #854F0B;">300-500万</div>
+      <div class="metric-source">抖音或小红书 · 来源：新浪财经招标公告</div>
+    </div>
+  </div>
+
+  <!-- Section 2: Consumer Journey -->
+  <h2>抖音家电消费者决策路径</h2>
+  <div class="section-card">
+    <div class="progress-dot">
+      <div class="progress-circle">1</div>
+      <div>
+        <div style="font-weight: 500; font-size: 14px;">内容种草</div>
+        <div style="font-size: 12px; color: #888780;">71% 的家电消费者在抖音被内容种草</div>
+      </div>
+    </div>
+    <div class="progress-dot" style="margin-left: 18px;">
+      <div style="width: 0.5px; height: 20px; background: #D3D1C7; margin-left: 17px; margin-bottom: 4px;"></div>
+    </div>
+    <div class="progress-dot">
+      <div class="progress-circle">2</div>
+      <div>
+        <div style="font-weight: 500; font-size: 14px;">搜索对比</div>
+        <div style="font-size: 12px; color: #888780;">垂类达人测评影响决策，平均搜索 4-6 次</div>
+      </div>
+    </div>
+    <div class="progress-dot" style="margin-left: 18px;">
+      <div style="width: 0.5px; height: 20px; background: #D3D1C7; margin-left: 17px; margin-bottom: 4px;"></div>
+    </div>
+    <div class="progress-dot">
+      <div class="progress-circle">3</div>
+      <div>
+        <div style="font-weight: 500; font-size: 14px;">下单购买</div>
+        <div style="font-size: 12px; color: #888780;">46% 用户在一周内完成购买，转化效率高</div>
+      </div>
+    </div>
+    <div class="progress-dot" style="margin-left: 18px;">
+      <div style="width: 0.5px; height: 20px; background: #D3D1C7; margin-left: 17px; margin-bottom: 4px;"></div>
+    </div>
+    <div class="progress-dot">
+      <div class="progress-circle">4</div>
+      <div>
+        <div style="font-weight: 500; font-size: 14px;">体验分享</div>
+        <div style="font-size: 12px; color: #888780;">UGC 反哺品牌口碑，形成种草闭环</div>
+      </div>
+    </div>
+    <div class="source-note"><b>数据来源：</b>《2025家电行业白皮书》（巨量引擎，2025年1月）| 奥维云网联合发布</div>
+  </div>
+
+  <!-- Section 3: TV Category -->
+  <h2>电视品类：品牌格局与投放策略</h2>
+  <div class="section-card">
+    <h3>国产头部品牌投放特征</h3>
+    <div class="brand-grid">
+      <div class="brand-card">
+        <div class="brand-name">TCL <span class="tag tag-red">国产双雄</span></div>
+        <div class="brand-desc">2025年双11 MiniLED电视领跑品牌。主打"MiniLED技术普及"内容战役，与测评类达人深度合作。技术普惠路线，大屏化先锋。</div>
+      </div>
+      <div class="brand-card">
+        <div class="brand-name">海信 <span class="tag tag-red">国产双雄</span></div>
+        <div class="brand-desc">"画质天花板"定位，高端市场强势。联手影音类达人做场景化内容。ULED/XDR技术传播核心。</div>
+      </div>
+      <div class="brand-card">
+        <div class="brand-name">小米 / 红米 <span class="tag tag-amber">性价比霸主</span></div>
+        <div class="brand-desc">"性价比颠覆"内容策略，Redmi主打年轻化短视频。年轻用户基本盘，生态联动内容优势明显。</div>
+      </div>
+      <div class="brand-card">
+        <div class="brand-name">华为智慧屏 <span class="tag tag-blue">AI高端路线</span></div>
+        <div class="brand-desc">"AI智慧屏"差异化定位，科技类达人合作密集。鸿蒙生态联动，高端AI交互是核心卖点。</div>
+      </div>
+    </div>
+
+    <h3 style="margin-top: 20px;">国际品牌策略</h3>
+    <table>
+      <tr><th>品牌</th><th>抖音投放策略</th><th>内容特征</th></tr>
+      <tr><td><b>索尼</b></td><td>高端画质定位，与影音发烧友类达人合作</td><td>画质对比、游戏电视实测、输入延迟测试</td></tr>
+      <tr><td><b>三星</b></td><td>品牌形象广告为主，QLED/MiniLED技术传播</td><td>视觉效果冲击力强，注重产品质感展示</td></tr>
+      <tr><td><b>LG</b></td><td>OLED赛道高端定位，与设计师/装修类达人合作</td><td>家居融合、壁画电视、超薄设计</td></tr>
+    </table>
+
+    <div class="source-note"><b>数据来源：</b>腾讯新闻·浏览器（2025-11-14）| 知乎专栏《2025内行人买电视机》（2025-05-17）| 行业公开报道</div>
+  </div>
+
+  <!-- TV Search Trends -->
+  <div class="section-card">
+    <h3>电视品类 抖音搜索热度趋势（2024年1-10月）</h3>
+    <div class="chart-row">
+      <div>
+        <div class="chart-container" style="height: 260px;"><canvas id="tvTrendChart"></canvas></div>
+      </div>
+      <div>
+        <div style="margin-bottom: 20px;">
+          <div style="font-size: 13px; color: #2C2C2A; margin-bottom: 6px;">游戏电视搜索量 <span style="color: #185FA5; font-weight: 500;">同比 +67%</span></div>
+          <div class="data-bar-track"><div class="data-bar-fill" style="width: 83.7%; background: #185FA5;"></div></div>
+        </div>
+        <div style="margin-bottom: 20px;">
+          <div style="font-size: 13px; color: #2C2C2A; margin-bottom: 6px;">90寸以上电视均价 <span style="color: #993C1D; font-weight: 500;">同比 -21%</span></div>
+          <div class="data-bar-track"><div class="data-bar-fill" style="width: 39%; background: #993C1D;"></div></div>
+        </div>
+        <div>
+          <div style="font-size: 13px; color: #2C2C2A; margin-bottom: 6px;">嵌入式家电搜索量 <span style="color: #0F6E56; font-weight: 500;">同比 +200%+</span></div>
+          <div class="data-bar-track"><div class="data-bar-fill" style="width: 100%; background: #0F6E56;"></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="insight-box">
+      <b>洞察：</b>游戏电视（+67%）与大屏化（90寸+均价降21%）是电视品类双驱动。以旧换新政策叠加国补，显著缩短换机周期。
+    </div>
+    <div class="source-note"><b>数据来源：</b>《2025家电行业白皮书》（巨量引擎，2025年1月）| 2024年1-10月数据</div>
+  </div>
+
+  <!-- Section 4: Robot Vacuum -->
+  <h2>扫地机器人品类：全球市场与抖音营销</h2>
+  <div class="section-card">
+    <h3>全球市场份额（2025年上半年）</h3>
+    <div class="two-col">
+      <div>
+        <div class="data-bar-container">
+          <div class="data-bar-label"><span>石头科技 <span style="color: #888780; font-weight: 400;">15.2%</span></span><span style="color: #185FA5; font-weight: 500;">全球第一</span></div>
+          <div class="data-bar-track"><div class="data-bar-fill" style="width: 30.4%; background: #185FA5;"></div></div>
+        </div>
+        <div class="data-bar-container">
+          <div class="data-bar-label"><span>科沃斯 <span style="color: #888780; font-weight: 400;">13.7%</span></span></div>
+          <div class="data-bar-track"><div class="data-bar-fill" style="width: 27.4%; background: #0F6E56;"></div></div>
+        </div>
+        <div class="data-bar-container">
+          <div class="data-bar-label"><span>追觅 <span style="color: #888780; font-weight: 400;">10.2%</span></span></div>
+          <div class="data-bar-track"><div class="data-bar-fill" style="width: 20.4%; background: #854F0B;"></div></div>
+        </div>
+        <div class="data-bar-container">
+          <div class="data-bar-label"><span>小米/米家 <span style="color: #888780; font-weight: 400;">7.4%</span></span></div>
+          <div class="data-bar-track"><div class="data-bar-fill" style="width: 14.8%; background: #5F5E5A;"></div></div>
+        </div>
+        <div class="data-bar-container">
+          <div class="data-bar-label"><span>iRobot <span style="color: #888780; font-weight: 400;">5.8%</span></span></div>
+          <div class="data-bar-track"><div class="data-bar-fill" style="width: 11.6%; background: #D3D1C7;"></div></div>
+        </div>
+      </div>
+      <div>
+        <div class="insight-box" style="margin: 0 0 12px 0;">
+          <b>核心结论</b><br>
+          全球扫地机器人市场 <b>前五名均为中国品牌</b>，累计占据全球 <b>50%+</b> 市场份额。中国品牌在抖音的营销投入与全球市占率高度正相关。
+        </div>
+        <div class="brand-card" style="margin-bottom: 8px;">
+          <div class="brand-name">石头科技 <span class="tag tag-blue">技术派</span></div>
+          <div class="brand-desc">"AI路径规划"内容核心，2024年出货量超iRobot成全球第一。科普向内容+实测对比。</div>
+        </div>
+        <div class="brand-card" style="margin-bottom: 8px;">
+          <div class="brand-name">追觅 <span class="tag tag-amber">高端技术</span></div>
+          <div class="brand-desc">高端技术路线，X50s Pro等旗舰机型内容投放密集。极限家庭环境实测视频。</div>
+        </div>
+        <div class="brand-card">
+          <div class="brand-name">科沃斯 / 云鲸 <span class="tag tag-green">全价位覆盖</span></div>
+          <div class="brand-desc">科沃斯全价位段覆盖，达人合作最广泛。云鲸拖地技术差异化，年轻化内容营销。</div>
+        </div>
+      </div>
+    </div>
+    <div class="source-note"><b>数据来源：</b>IDC数据 援引新浪财经（2025-09-21）| 搜狐财经（2025-09-21）</div>
+  </div>
+
+  <!-- Robot Vacuum Content Strategy -->
+  <div class="section-card">
+    <h3>抖音内容竞争焦点（2025年）</h3>
+    <table>
+      <tr><th>技术卖点</th><th>主推品牌</th><th>内容形式</th><th>抖音特色</th></tr>
+      <tr><td><b>AI路径规划 + 避障</b></td><td>石头科技</td><td>科普向内容 + 实测对比</td><td>AI功能演示短视频</td></tr>
+      <tr><td><b>全场景覆盖 + 极致清洁</b></td><td>追觅（X50s Pro）</td><td>极限家庭环境实测</td><td>真实家庭场景Vlog</td></tr>
+      <tr><td><b>性价比 + 生态联动</b></td><td>小米/米家</td><td>米家全屋智能场景化</td><td>智能家居联动演示</td></tr>
+      <tr><td><b>拖地技术升级</b></td><td>云鲸</td><td>拖地效果对比视频</td><td>家务减负痛点直击</td></tr>
+      <tr><td><b>全价位段覆盖</b></td><td>科沃斯 + 添可</td><td>多SKU分层达人匹配</td><td>妈妈/家庭/宠物博主矩阵</td></tr>
+    </table>
+    <div class="source-note"><b>数据来源：</b>网易财经《2025年旗舰机型对比》（2025-07-28）</div>
+  </div>
+
+  <!-- Section 5: Influencer Analysis -->
+  <h2>达人商单分析与报价参考</h2>
+
+  <div class="warn-box">
+    <b>⚠️ 数据说明：</b>以下报价为行业区间估算，实际报价因达人粉丝质量、品牌BD能力、合作形式（纯佣/坑位费+佣金）差异较大。精确报价需登录巨量星图平台查询。
+  </div>
+
+  <div class="section-card">
+    <h3>达人商单报价区间（家电/3C品类参考）</h3>
+    <div class="three-col">
+      <div class="budget-card">
+        <div style="font-size: 11px; color: #888780;">1000万+ 粉丝</div>
+        <div class="budget-range">20-50万/条</div>
+        <div class="budget-desc">视频商单 · 品牌曝光型，新品发布会</div>
+      </div>
+      <div class="budget-card">
+        <div style="font-size: 11px; color: #888780;">500-1000万 粉丝</div>
+        <div class="budget-range">10-30万/条</div>
+        <div class="budget-desc">重点商单 · 大促主推场次</div>
+      </div>
+      <div class="budget-card">
+        <div style="font-size: 11px; color: #888780;">100-500万 粉丝</div>
+        <div class="budget-range">3-15万/条</div>
+        <div class="budget-desc"><b>主力投放区间</b> · 平衡ROI与覆盖面</div>
+      </div>
+      <div class="budget-card">
+        <div style="font-size: 11px; color: #888780;">50-100万 粉丝</div>
+        <div class="budget-range">1-5万/条</div>
+        <div class="budget-desc">垂直测评 · <b>高ROI</b>，决策后期用户</div>
+      </div>
+      <div class="budget-card">
+        <div style="font-size: 11px; color: #888780;">10-50万 粉丝</div>
+        <div class="budget-range">0.3-2万/条</div>
+        <div class="budget-desc">长尾铺量 · KOC矩阵，纯佣或低坑位</div>
+      </div>
+      <div class="budget-card">
+        <div style="font-size: 11px; color: #888780;">头部直播专场</div>
+        <div class="budget-range">50-100万/场</div>
+        <div class="budget-desc">坑位费 · 广东夫妇/董先生等级别</div>
+      </div>
+    </div>
+    <div class="source-note"><b>数据来源：</b>行业公开信息综合估算 | 精确数据获取：<b>巨量星图平台</b>（xingtu.oceanengine.com）→ 达人报价查询</div>
+  </div>
+
+  <!-- Influencer Tiers -->
+  <div class="section-card">
+    <h3>达人类型与家电品类适配分析</h3>
+    <table>
+      <tr><th>达人类型</th><th>电视品类价值</th><th>扫地机品类价值</th><th>商单建议</th></tr>
+      <tr>
+        <td><b>家电/影音垂直测评</b></td>
+        <td>⭐⭐⭐⭐⭐<br>横评/拆机/参数对比</td>
+        <td>⭐⭐⭐⭐⭐<br>多品牌横评/长期试用</td>
+        <td>精准流量，高转化，100-500万粉丝档</td>
+      </tr>
+      <tr>
+        <td><b>游戏主播/UP主</b></td>
+        <td>⭐⭐⭐⭐<br>游戏电视精准人群</td>
+        <td>⭐⭐<br>男性科技用户触达</td>
+        <td>PS5/Xbox搭配电视实测，输入延迟测试</td>
+      </tr>
+      <tr>
+        <td><b>家居/装修场景</b></td>
+        <td>⭐⭐⭐⭐<br>客厅场景融入感</td>
+        <td>⭐⭐⭐<br>清洁场景真实使用</td>
+        <td>广泛种草，适合品牌曝光</td>
+      </tr>
+      <tr>
+        <td><b>宝妈/家庭/宠物博主</b></td>
+        <td>⭐⭐<br>家庭场景间接曝光</td>
+        <td>⭐⭐⭐⭐⭐<br>家务减负痛点精准</td>
+        <td>科沃斯/云鲸等品牌重点合作对象</td>
+      </tr>
+      <tr>
+        <td><b>综合头部达人</b></td>
+        <td>⭐⭐⭐<br>品牌曝光，大促专场</td>
+        <td>⭐⭐⭐<br>爆量型，品牌背书</td>
+        <td>广东夫妇/董先生等，单场GMV千万级</td>
+      </tr>
+    </table>
+    <div class="source-note"><b>数据来源：</b>蝉妈妈《抖音全行业带货达人排名榜》（2026-06-11）| 行业公开观察</div>
+  </div>
+
+  <!-- Section 6: Marketing Calendar -->
+  <h2>2025-2026年投放节点与机会窗口</h2>
+  <div class="section-card">
+    <table>
+      <tr><th>营销节点</th><th>时间</th><th>电视品类机会</th><th>扫地机品类机会</th><th>优先级</th></tr>
+      <tr><td><b>年货节</b></td><td>1月</td><td>换新需求高峰，大屏电视主推</td><td>年终奖消费，高端机型</td><td><span class="tag tag-red">高</span></td></tr>
+      <tr><td><b>38大促</b></td><td>3月</td><td>—</td><td>女性向营销，家务减负痛点</td><td><span class="tag tag-amber">中</span></td></tr>
+      <tr><td><b>618</b></td><td>6月</td><td>上半年最大促销节点</td><td>上半年最大促销节点</td><td><span class="tag tag-red">高</span></td></tr>
+      <tr><td><b>暑假/开学季</b></td><td>7-8月</td><td>游戏电视热销（学生群体）</td><td>家庭清洁需求（暑假大扫除）</td><td><span class="tag tag-amber">中</span></td></tr>
+      <tr><td><b>以旧换新政策窗口</b></td><td>全年</td><td>政策补贴叠加，换机周期缩短</td><td>同上，清洁家电纳入补贴</td><td><span class="tag tag-red">高</span></td></tr>
+      <tr><td><b>双11</b></td><td>11月</td><td>全年最大销售节点</td><td>全年最大销售节点</td><td><span class="tag tag-red">高</span></td></tr>
+      <tr><td><b>双12/年末</b></td><td>12月</td><td>清库存 + 新年换新</td><td>年终冲刺</td><td><span class="tag tag-gray">中</span></td></tr>
+    </table>
+  </div>
+
+  <!-- Section 7: Data Gaps -->
+  <h2>数据缺口与补充建议</h2>
+  <div class="section-card">
+    <table>
+      <tr><th>缺失数据</th><th>重要程度</th><th>建议补充途径</th></tr>
+      <tr><td>电视/扫地机垂直达人TOP50名单及GMV</td><td><span class="tag tag-red">⭐⭐⭐⭐⭐</span></td><td>蝉妈妈/飞瓜数据购买账号查询（月费约2000-5000元）</td></tr>
+      <tr><td>各品牌抖音自播GMV及投放ROI</td><td><span class="tag tag-red">⭐⭐⭐⭐</span></td><td>品牌方公开财报 / 第三方数据工具</td></tr>
+      <tr><td>星图平台具体达人报价（精确）</td><td><span class="tag tag-red">⭐⭐⭐⭐</span></td><td>登录巨量星图平台（xingtu.oceanengine.com）查询</td></tr>
+      <tr><td>2026年618期间家电品类抖音GMV</td><td><span class="tag tag-amber">⭐⭐⭐</span></td><td>等待抖音电商官方战报发布</td></tr>
+      <tr><td>竞品详细投放策略（达人矩阵/预算分配）</td><td><span class="tag tag-amber">⭐⭐⭐</span></td><td>第三方监测工具（如AdBug、飞瓜-达人商单记录）</td></tr>
+    </table>
+
+    <h3 style="margin-top: 24px;">建议下一步行动</h3>
+    <div class="brand-grid">
+      <div class="brand-card" style="border: 0.5px solid #185FA5;">
+        <div class="brand-name" style="color: #185FA5;">1. 采购数据工具账号</div>
+        <div class="brand-desc">蝉妈妈或飞瓜数据专业版，可获取精准达人GMV和商单数据</div>
+      </div>
+      <div class="brand-card" style="border: 0.5px solid #0F6E56;">
+        <div class="brand-name" style="color: #0F6E56;">2. 对接巨量星图</div>
+        <div class="brand-desc">注册品牌方账号，直接查看达人报价和接单历史记录</div>
+      </div>
+      <div class="brand-card" style="border: 0.5px solid #854F0B;">
+        <div class="brand-name" style="color: #854F0B;">3. 竞品达人监测</div>
+        <div class="brand-desc">选取2-3个核心竞品，监测其抖音达人合作动态</div>
+      </div>
+      <div class="brand-card" style="border: 0.5px solid #712B13;">
+        <div class="brand-name" style="color: #712B13;">4. 建立达人库</div>
+        <div class="brand-desc">按A/B/C三类建立长期合作达人库，大促前2个月锁定档期</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 8: Data Sources -->
+  <h2>数据来源清单</h2>
+  <div class="section-card">
+    <table>
+      <tr><th>#</th><th>数据内容</th><th>来源</th><th>获取日期</th></tr>
+      <tr><td>1</td><td>抖音家电GMV增速 67%</td><td>《2025巨量引擎家电行业白皮书》（奥维云网联合发布）</td><td>公开资料</td></tr>
+      <tr><td>2</td><td>71%消费者在抖音被种草家电</td><td>《2025家电行业白皮书》（巨量引擎）</td><td>2025年1月</td></tr>
+      <tr><td>3</td><td>扫地机器人全球市场份额</td><td>IDC数据 援引新浪财经/搜狐财经</td><td>2025年9月</td></tr>
+      <tr><td>4</td><td>石头科技2024年出货量全球第一</td><td>IDC统计 援引新浪财经</td><td>2025年3月</td></tr>
+      <tr><td>5</td><td>游戏电视搜索量同比 +67%</td><td>《2025家电行业白皮书》</td><td>2024年1-10月数据</td></tr>
+      <tr><td>6</td><td>家电品牌抖音达人合作预算300-500万</td><td>新浪财经·有单iBrief招标公告</td><td>2025年8月</td></tr>
+      <tr><td>7</td><td>抖音全行业带货达人排名</td><td>蝉妈妈数据平台</td><td>2026年6月11日</td></tr>
+      <tr><td>8</td><td>星图商单拒单率原因统计</td><td>蝉妈妈运营圈文章</td><td>2026年3月</td></tr>
+    </table>
+  </div>
+
+  <div class="footer">
+    报告编制：总经理助理 &nbsp;|&nbsp; 数据截止：2026年6月13日 &nbsp;|&nbsp; 精确数据建议通过官方数据工具核实
+  </div>
+
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // TV Trend Chart
+  var tvCtx = document.getElementById('tvTrendChart').getContext('2d');
+  new Chart(tvCtx, {
+    type: 'bar',
+    data: {
+      labels: ['游戏电视\n搜索量', '90寸+电视\n均价变化', '嵌入式家电\n搜索量', '厨房空调\n搜索量', 'AI智能家电\n搜索量'],
+      datasets: [{
+        label: '同比变化（%）',
+        data: [67, -21, 200, 227, 100],
+        backgroundColor: ['#185FA5', '#993C1D', '#0F6E56', '#0F6E56', '#185FA5'],
+        borderRadius: 4,
+        maxBarThickness: 48
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: function(ctx) {
+              return (ctx.parsed.y >= 0 ? '+' : '') + ctx.parsed.y + '%';
+            }
+          }
+        }
+      },
+      scales: {
+        y: {
+          grid: { color: 'rgba(0,0,0,0.06)' },
+          ticks: { font: { size: 11 }, color: '#888780',
+            callback: function(v) { return v + '%'; }
+          },
+          title: { display: true, text: '同比变化（%）', font: { size: 11 }, color: '#888780' }
+        },
+        x: {
+          grid: { display: false },
+          ticks: { font: { size: 11 }, color: '#2C2C2A' }
+        }
+      }
+    }
+  });
+});
+</script>
+</body>
+</html>
