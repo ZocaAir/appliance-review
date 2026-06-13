@@ -1,0 +1,1321 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>家电内容创新选题组合库</title>
+  <style>
+    :root {
+      --bg: #f5f7fb;
+      --card: #ffffff;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --border: #e5e7eb;
+      --blue: #00a1d6;
+      --blue-light: #e0f2fe;
+      --green: #16a34a;
+      --green-light: #dcfce7;
+      --orange: #ea580c;
+      --orange-light: #ffedd5;
+      --purple: #7c3aed;
+      --purple-light: #ede9fe;
+      --red: #dc2626;
+      --red-light: #fee2e2;
+      --yellow: #ca8a04;
+      --yellow-light: #fef9c3;
+      --dark: #111827;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .layout {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      width: 280px;
+      background: var(--dark);
+      color: #fff;
+      padding: 24px 18px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      overflow-y: auto;
+    }
+
+    .sidebar h1 {
+      font-size: 20px;
+      line-height: 1.4;
+      margin: 0 0 8px;
+    }
+
+    .sidebar p {
+      color: #9ca3af;
+      font-size: 13px;
+      line-height: 1.6;
+      margin: 0 0 24px;
+    }
+
+    .nav-title {
+      color: #9ca3af;
+      font-size: 12px;
+      margin: 22px 0 8px;
+    }
+
+    .nav a {
+      display: block;
+      padding: 10px 12px;
+      border-radius: 10px;
+      color: #d1d5db;
+      font-size: 14px;
+      margin-bottom: 6px;
+    }
+
+    .nav a:hover {
+      background: var(--blue);
+      color: #fff;
+    }
+
+    .main {
+      margin-left: 280px;
+      padding: 32px;
+      width: calc(100% - 280px);
+    }
+
+    .hero {
+      background: linear-gradient(135deg, #00a1d6, #6366f1);
+      border-radius: 24px;
+      padding: 34px;
+      color: #fff;
+      margin-bottom: 24px;
+    }
+
+    .hero h2 {
+      margin: 0 0 10px;
+      font-size: 30px;
+      line-height: 1.3;
+    }
+
+    .hero p {
+      margin: 0;
+      color: rgba(255,255,255,0.88);
+      line-height: 1.8;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 22px;
+    }
+
+    .btn {
+      border: 0;
+      border-radius: 10px;
+      padding: 10px 16px;
+      background: #fff;
+      color: #0284c7;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .btn.secondary {
+      background: rgba(255,255,255,0.16);
+      border: 1px solid rgba(255,255,255,0.35);
+      color: #fff;
+    }
+
+    .section {
+      margin-bottom: 30px;
+    }
+
+    .section-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 16px;
+      margin: 34px 0 14px;
+    }
+
+    .section-title h2 {
+      font-size: 24px;
+      margin: 0;
+    }
+
+    .section-title span {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .grid {
+      display: grid;
+      gap: 16px;
+    }
+
+    .grid-4 {
+      grid-template-columns: repeat(4, 1fr);
+    }
+
+    .grid-3 {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .grid-2 {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: 18px;
+      border: 1px solid var(--border);
+      padding: 20px;
+      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.04);
+    }
+
+    .card h3 {
+      margin: 0 0 10px;
+      font-size: 18px;
+    }
+
+    .card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.75;
+    }
+
+    .metric {
+      font-size: 30px;
+      font-weight: 800;
+      margin: 8px 0 6px;
+    }
+
+    .tag {
+      display: inline-flex;
+      padding: 4px 9px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      margin: 3px 4px 3px 0;
+      white-space: nowrap;
+    }
+
+    .tag.blue {
+      background: var(--blue-light);
+      color: #0284c7;
+    }
+
+    .tag.green {
+      background: var(--green-light);
+      color: var(--green);
+    }
+
+    .tag.orange {
+      background: var(--orange-light);
+      color: var(--orange);
+    }
+
+    .tag.purple {
+      background: var(--purple-light);
+      color: var(--purple);
+    }
+
+    .tag.red {
+      background: var(--red-light);
+      color: var(--red);
+    }
+
+    .tag.yellow {
+      background: var(--yellow-light);
+      color: var(--yellow);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #fff;
+      font-size: 14px;
+    }
+
+    th, td {
+      padding: 13px 12px;
+      border-bottom: 1px solid var(--border);
+      text-align: left;
+      vertical-align: top;
+      line-height: 1.65;
+    }
+
+    th {
+      background: #f9fafb;
+      color: #374151;
+      font-weight: 800;
+    }
+
+    .topic-card {
+      border-left: 5px solid var(--blue);
+    }
+
+    .topic-card.tv {
+      border-left-color: #0284c7;
+    }
+
+    .topic-card.cinema {
+      border-left-color: #7c3aed;
+    }
+
+    .topic-card.robot {
+      border-left-color: #16a34a;
+    }
+
+    .topic-card.kitchen {
+      border-left-color: #ea580c;
+    }
+
+    .topic-card.combo {
+      border-left-color: #dc2626;
+    }
+
+    .topic-list {
+      margin: 0;
+      padding-left: 18px;
+      font-size: 14px;
+      line-height: 1.9;
+      color: #374151;
+    }
+
+    .idea-box {
+      background: #f9fafb;
+      border: 1px dashed var(--border);
+      border-radius: 14px;
+      padding: 16px;
+      margin-top: 12px;
+    }
+
+    .idea-box strong {
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    .model {
+      display: grid;
+      grid-template-columns: 150px 1fr;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px dashed var(--border);
+    }
+
+    .model:last-child {
+      border-bottom: none;
+    }
+
+    .model strong {
+      color: #111827;
+    }
+
+    .model span {
+      color: var(--muted);
+      line-height: 1.75;
+      font-size: 14px;
+    }
+
+    .series-card {
+      background: #fff;
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      overflow: hidden;
+    }
+
+    .series-header {
+      padding: 16px 18px;
+      background: #111827;
+      color: #fff;
+    }
+
+    .series-header h3 {
+      margin: 0 0 6px;
+      font-size: 18px;
+    }
+
+    .series-header p {
+      color: #cbd5e1;
+      margin: 0;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .series-body {
+      padding: 18px;
+    }
+
+    .warning {
+      background: #fff7ed;
+      border: 1px solid #fed7aa;
+      color: #9a3412;
+      padding: 16px 18px;
+      border-radius: 16px;
+      line-height: 1.7;
+      font-size: 14px;
+    }
+
+    .footer {
+      text-align: center;
+      color: var(--muted);
+      font-size: 13px;
+      padding: 36px 0 12px;
+    }
+
+    @media (max-width: 1100px) {
+      .sidebar {
+        display: none;
+      }
+
+      .main {
+        margin-left: 0;
+        width: 100%;
+        padding: 20px;
+      }
+
+      .grid-4,
+      .grid-3,
+      .grid-2 {
+        grid-template-columns: 1fr;
+      }
+
+      .model {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+<div class="layout">
+
+  <aside class="sidebar">
+    <h1>家电创新选题组合库</h1>
+    <p>教程类 / 痛点刚需 / 场景解决方案 / 跨品类内容组合</p>
+
+    <div class="nav">
+      <div class="nav-title">选题方法</div>
+      <a href="#overview">内容机会总览</a>
+      <a href="#formula">爆款教程公式</a>
+      <a href="#series">系列栏目设计</a>
+
+      <div class="nav-title">品类选题</div>
+      <a href="#tv">电视创新选题</a>
+      <a href="#cinema">家庭影院创新选题</a>
+      <a href="#robot">扫地机创新选题</a>
+      <a href="#kitchen">厨电创新选题</a>
+
+      <div class="nav-title">跨品类方案</div>
+      <a href="#combo">跨品类组合选题</a>
+      <a href="#pain">痛点解决方案库</a>
+      <a href="#tutorial">教程类脚本模板</a>
+      <a href="#monthly">月度组合排期</a>
+    </div>
+  </aside>
+
+  <main class="main">
+
+    <div class="hero">
+      <h2>家电内容创新选题组合库</h2>
+      <p>
+        这份页面专门用于沉淀“教程类、痛点刚需、解决方案型”内容。重点不是单纯介绍产品，
+        而是围绕真实家庭问题，把电视、家庭影院、扫地机、厨电做成可收藏、可复用、可转化的内容栏目。
+      </p>
+      <div class="hero-actions">
+        <button class="btn">新增痛点选题</button>
+        <button class="btn">生成教程脚本</button>
+        <button class="btn secondary">导出招商版</button>
+        <button class="btn secondary">查看系列栏目</button>
+      </div>
+    </div>
+
+    <section id="overview" class="section">
+      <div class="section-title">
+        <h2>一、内容机会总览</h2>
+        <span>家电内容最值得做的是“帮用户解决具体生活问题”</span>
+      </div>
+
+      <div class="grid grid-4">
+        <div class="card">
+          <h3>教程类</h3>
+          <div class="metric">高收藏</div>
+          <p>比如安装前准备、参数怎么看、怎么布局、怎么避坑、怎么调校。</p>
+          <div class="idea-box">
+            <span class="tag blue">教程</span>
+            <span class="tag green">收藏</span>
+            <span class="tag orange">搜索</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>痛点刚需</h3>
+          <div class="metric">高互动</div>
+          <p>比如家里有宠物、有孩子、小户型、老房改造、厨房太小、电视墙没预留。</p>
+          <div class="idea-box">
+            <span class="tag red">痛点</span>
+            <span class="tag purple">评论</span>
+            <span class="tag yellow">转发</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>解决方案</h3>
+          <div class="metric">高转化</div>
+          <p>从单品推荐升级为完整方案，例如“客厅影音方案”“小厨房厨电方案”。</p>
+          <div class="idea-box">
+            <span class="tag green">方案</span>
+            <span class="tag blue">商单</span>
+            <span class="tag orange">套系</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>真实改造</h3>
+          <div class="metric">高粘性</div>
+          <p>以真实家庭为案例，做前后对比、预算拆解、失败经验复盘。</p>
+          <div class="idea-box">
+            <span class="tag purple">改造</span>
+            <span class="tag red">故事</span>
+            <span class="tag green">信任</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="formula" class="section">
+      <div class="section-title">
+        <h2>二、教程类内容爆款公式</h2>
+        <span>适合做成长期栏目，提升账号专业度和搜索流量</span>
+      </div>
+
+      <div class="grid grid-2">
+        <div class="card">
+          <h3>教程类内容结构</h3>
+          <div class="model">
+            <strong>1. 明确问题</strong>
+            <span>开头直接说用户遇到的具体问题，例如“电视买大了会不会看着累？”“洗碗机到底能不能装？”</span>
+          </div>
+          <div class="model">
+            <strong>2. 判断条件</strong>
+            <span>告诉用户先看哪些条件，比如尺寸、预算、户型、水电、使用习惯。</span>
+          </div>
+          <div class="model">
+            <strong>3. 操作步骤</strong>
+            <span>把复杂决策拆成 3-5 个步骤，越像清单越容易收藏。</span>
+          </div>
+          <div class="model">
+            <strong>4. 错误示范</strong>
+            <span>展示常见踩坑点，比如插座没留、基站没位置、电视尺寸不匹配。</span>
+          </div>
+          <div class="model">
+            <strong>5. 方案推荐</strong>
+            <span>按人群和预算给出不同方案，方便自然接入品牌或产品。</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>推荐标题公式</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>标题公式</th>
+                <th>示例</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>装修前先看这条</td>
+                <td>装修前想装扫地机自动上下水，先看这5个位置</td>
+              </tr>
+              <tr>
+                <td>不是XX越大越好</td>
+                <td>电视不是越大越好，先看你家客厅这3个距离</td>
+              </tr>
+              <tr>
+                <td>XX到底能不能装</td>
+                <td>小厨房到底能不能装洗碗机？一分钟自测</td>
+              </tr>
+              <tr>
+                <td>XX预算怎么分</td>
+                <td>客厅影院1万元预算，电视、音响、灯光怎么分？</td>
+              </tr>
+              <tr>
+                <td>保姆级教程</td>
+                <td>第一次买扫地机保姆级教程：哪些功能真有用？</td>
+              </tr>
+              <tr>
+                <td>真实改造复盘</td>
+                <td>我帮朋友改了一个小厨房，发现厨电最容易踩这4个坑</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section id="series" class="section">
+      <div class="section-title">
+        <h2>三、建议打造的系列栏目</h2>
+        <span>系列化比单条选题更容易形成用户心智，也更方便招商</span>
+      </div>
+
+      <div class="grid grid-3">
+        <div class="series-card">
+          <div class="series-header">
+            <h3>栏目1：家电急诊室</h3>
+            <p>专门解决用户家里的具体问题</p>
+          </div>
+          <div class="series-body">
+            <ol class="topic-list">
+              <li>电视墙没预留网线，还能装大屏电视吗？</li>
+              <li>扫地机基站没地方放，怎么补救？</li>
+              <li>厨房太小，洗碗机和蒸烤箱只能二选一吗？</li>
+              <li>客厅声音太差，是换电视还是加回音壁？</li>
+            </ol>
+          </div>
+        </div>
+
+        <div class="series-card">
+          <div class="series-header">
+            <h3>栏目2：一分钟自测</h3>
+            <p>用清单帮助用户判断能不能买</p>
+          </div>
+          <div class="series-body">
+            <ol class="topic-list">
+              <li>一分钟自测：你家适不适合装85寸电视？</li>
+              <li>一分钟自测：你家适不适合自动上下水扫地机？</li>
+              <li>一分钟自测：你家能不能装嵌入式洗碗机？</li>
+              <li>一分钟自测：你家适合投影还是电视？</li>
+            </ol>
+          </div>
+        </div>
+
+        <div class="series-card">
+          <div class="series-header">
+            <h3>栏目3：预算拆解局</h3>
+            <p>帮用户把钱花在最有感知的地方</p>
+          </div>
+          <div class="series-body">
+            <ol class="topic-list">
+              <li>1万元客厅娱乐预算，电视和音响怎么分？</li>
+              <li>5000元清洁预算，扫地机还是洗地机？</li>
+              <li>2万元厨房家电预算，冰箱洗碗机蒸烤箱怎么选？</li>
+              <li>新房全屋家电预算有限，哪些先买哪些后买？</li>
+            </ol>
+          </div>
+        </div>
+
+        <div class="series-card">
+          <div class="series-header">
+            <h3>栏目4：装修前避坑</h3>
+            <p>强搜索、高收藏、适合厨电和家装节点</p>
+          </div>
+          <div class="series-body">
+            <ol class="topic-list">
+              <li>装修前电视墙要预留什么？插座、网线、挂架一次讲清</li>
+              <li>装修前扫地机基站怎么留？上下水、电源、位置全讲清</li>
+              <li>装修前厨电尺寸怎么定？别等橱柜做好才后悔</li>
+              <li>装修前家庭影院怎么布线？普通客厅也能做</li>
+            </ol>
+          </div>
+        </div>
+
+        <div class="series-card">
+          <div class="series-header">
+            <h3>栏目5：真实家庭改造</h3>
+            <p>用故事感提升完播和信任</p>
+          </div>
+          <div class="series-body">
+            <ol class="topic-list">
+              <li>帮有娃家庭改造客厅：电视、护眼、收纳怎么兼顾？</li>
+              <li>帮有猫家庭做清洁方案：扫地机到底能不能解放双手？</li>
+              <li>帮小户型厨房做厨电方案：冰箱洗碗机怎么塞进去？</li>
+              <li>帮游戏党改造客厅：大屏、低延迟、声音怎么配？</li>
+            </ol>
+          </div>
+        </div>
+
+        <div class="series-card">
+          <div class="series-header">
+            <h3>栏目6：反向选购</h3>
+            <p>先说不适合谁，更容易建立信任</p>
+          </div>
+          <div class="series-body">
+            <ol class="topic-list">
+              <li>这几类家庭，真不建议盲目买98寸电视</li>
+              <li>这几类家庭，扫地机不一定比洗地机更适合</li>
+              <li>这几类厨房，不建议硬装嵌入式厨电</li>
+              <li>这几类客厅，投影可能不如电视实用</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="tv" class="section">
+      <div class="section-title">
+        <h2>四、电视创新选题</h2>
+        <span>重点做“尺寸判断、电视墙规划、游戏观影体验、家庭成员场景”</span>
+      </div>
+
+      <div class="grid grid-2">
+        <div class="card topic-card tv">
+          <h3>电视教程类选题</h3>
+          <ol class="topic-list">
+            <li>电视尺寸自测教程：你家到底适合买75、85还是98寸？</li>
+            <li>电视墙装修前必看：插座、网线、挂架、高度怎么留？</li>
+            <li>第一次买Mini LED电视：控光、亮度、分区到底怎么看？</li>
+            <li>PS5玩家电视设置教程：HDR、刷新率、游戏模式怎么调？</li>
+            <li>电视护眼设置教程：亮度、色温、距离怎么调更舒服？</li>
+            <li>客厅电视安装高度教程：坐着看、躺着看、儿童观看怎么平衡？</li>
+          </ol>
+        </div>
+
+        <div class="card topic-card tv">
+          <h3>电视痛点解决方案</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>用户痛点</th>
+                <th>选题方向</th>
+                <th>展现重点</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>不知道买多大</td>
+                <td>我用3个客厅实测：电视越大越爽吗？</td>
+                <td>观看距离、开间、字幕大小、压迫感</td>
+              </tr>
+              <tr>
+                <td>怕孩子看电视伤眼</td>
+                <td>有娃家庭电视怎么选？不是只看护眼认证</td>
+                <td>距离、亮度、频闪、观看时长、内容管理</td>
+              </tr>
+              <tr>
+                <td>游戏电视参数看不懂</td>
+                <td>游戏电视到底看哪些参数？主机玩家实测</td>
+                <td>HDMI 2.1、延迟、VRR、120Hz、HDR</td>
+              </tr>
+              <tr>
+                <td>电视墙没预留</td>
+                <td>电视墙做错了还能补救吗？真实改造方案</td>
+                <td>走线、挂架、插座、网线、收纳</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:16px;">
+        <h3>电视创新组合选题</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>组合方式</th>
+              <th>参考选题</th>
+              <th>适合植入</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>电视 + 游戏</td>
+              <td>把客厅改成游戏房，需要先换电视还是先换音响？</td>
+              <td>游戏电视、回音壁、游戏主机</td>
+            </tr>
+            <tr>
+              <td>电视 + 有娃家庭</td>
+              <td>有娃家庭客厅电视怎么放？护眼、距离、收纳一次解决</td>
+              <td>护眼电视、电视柜、收纳产品</td>
+            </tr>
+            <tr>
+              <td>电视 + 赛事</td>
+              <td>看球赛最爽的电视设置：运动补偿到底开不开？</td>
+              <td>高刷电视、Mini LED电视</td>
+            </tr>
+            <tr>
+              <td>电视 + 装修</td>
+              <td>装修前电视墙不要乱做，这几个预留决定后期体验</td>
+              <td>大屏电视、挂架、线材、路由器</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="cinema" class="section">
+      <div class="section-title">
+        <h2>五、家庭影院创新选题</h2>
+        <span>重点做“听得懂的声音教程 + 普通客厅可落地方案”</span>
+      </div>
+
+      <div class="grid grid-2">
+        <div class="card topic-card cinema">
+          <h3>家庭影院教程类选题</h3>
+          <ol class="topic-list">
+            <li>普通客厅家庭影院教程：先买电视、投影还是回音壁？</li>
+            <li>回音壁摆放教程：放错位置，贵一倍也不好听</li>
+            <li>杜比全景声入门教程：普通家庭到底能不能听出来？</li>
+            <li>租房党家庭影院教程：不打孔、不布线，怎么提升观影体验？</li>
+            <li>投影安装教程：距离、幕布、亮度、插座一次讲清</li>
+            <li>客厅低音炮避坑教程：别让邻居先听见你的家庭影院</li>
+          </ol>
+        </div>
+
+        <div class="card topic-card cinema">
+          <h3>家庭影院痛点解决方案</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>用户痛点</th>
+                <th>选题方向</th>
+                <th>展现重点</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>电视声音太薄</td>
+                <td>电视声音不好听，是买回音壁还是音箱？</td>
+                <td>对白、低频、环绕、安装难度</td>
+              </tr>
+              <tr>
+                <td>投影白天看不清</td>
+                <td>投影白天看不清怎么解决？先别急着换机器</td>
+                <td>亮度、幕布、窗帘、环境光</td>
+              </tr>
+              <tr>
+                <td>怕扰民</td>
+                <td>家庭影院会不会扰民？夜间观影设置教程</td>
+                <td>低频控制、夜间模式、音量、摆位</td>
+              </tr>
+              <tr>
+                <td>预算不知道怎么分</td>
+                <td>1万元客厅影院预算，显示和声音怎么分？</td>
+                <td>电视/投影/回音壁/低音炮预算比例</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:16px;">
+        <h3>家庭影院创新组合选题</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>组合方式</th>
+              <th>参考选题</th>
+              <th>适合植入</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>家庭影院 + 租房</td>
+              <td>租房党不打孔不布线，能不能做家庭影院？</td>
+              <td>回音壁、便携投影、无线音响</td>
+            </tr>
+            <tr>
+              <td>家庭影院 + 亲子</td>
+              <td>周末亲子观影角怎么搭？电视、声音、灯光都要舒服</td>
+              <td>护眼电视、回音壁、智能灯</td>
+            </tr>
+            <tr>
+              <td>家庭影院 + 赛事</td>
+              <td>客厅观赛怎么更有现场感？电视之外，声音也很关键</td>
+              <td>回音壁、低音炮、大屏电视</td>
+            </tr>
+            <tr>
+              <td>家庭影院 + 装修</td>
+              <td>装修前想做家庭影院，千万别漏这6个预留</td>
+              <td>投影、幕布、音响、线材</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="robot" class="section">
+      <div class="section-title">
+        <h2>六、扫地机创新选题</h2>
+        <span>重点做“家庭清洁痛点实验 + 基站预留教程 + 人群化方案”</span>
+      </div>
+
+      <div class="grid grid-2">
+        <div class="card topic-card robot">
+          <h3>扫地机教程类选题</h3>
+          <ol class="topic-list">
+            <li>第一次买扫地机教程：吸力、避障、拖地、基站到底看什么？</li>
+            <li>扫地机基站摆放教程：放错位置，体验直接打折</li>
+            <li>自动上下水预留教程：装修前要留电、留水、留空间</li>
+            <li>有宠家庭扫地机设置教程：毛发、猫砂、禁区怎么处理？</li>
+            <li>扫地机地图设置教程：禁区、分区、清洁顺序怎么设？</li>
+            <li>扫地机长期维护教程：拖布、滤网、滚刷多久清理一次？</li>
+          </ol>
+        </div>
+
+        <div class="card topic-card robot">
+          <h3>扫地机痛点解决方案</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>用户痛点</th>
+                <th>选题方向</th>
+                <th>展现重点</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>家里宠物毛多</td>
+                <td>有猫家庭扫地机能不能真解放双手？一周实测</td>
+                <td>猫毛、猫砂、防缠绕、宠物碗避障</td>
+              </tr>
+              <tr>
+                <td>地面总拖不干净</td>
+                <td>扫地机拖地到底有没有用？厨房污渍实测</td>
+                <td>酱油、脚印、干湿污渍、复拖</td>
+              </tr>
+              <tr>
+                <td>基站没地方放</td>
+                <td>扫地机基站没位置，5种家庭布局怎么解决？</td>
+                <td>阳台、卫生间、柜体、厨房、客厅角落</td>
+              </tr>
+              <tr>
+                <td>怕买了还要手动维护</td>
+                <td>旗舰扫地机真的免维护吗？7天不管它会怎样？</td>
+                <td>集尘、洗拖布、烘干、水箱、异味</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:16px;">
+        <h3>扫地机创新组合选题</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>组合方式</th>
+              <th>参考选题</th>
+              <th>适合植入</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>扫地机 + 宠物</td>
+              <td>猫毛、猫砂、宠物碗：有宠家庭扫地机生存挑战</td>
+              <td>高端扫地机、宠物家居用品</td>
+            </tr>
+            <tr>
+              <td>扫地机 + 装修</td>
+              <td>装修前想隐藏扫地机基站，这几个位置最合理</td>
+              <td>自动上下水扫地机、定制柜</td>
+            </tr>
+            <tr>
+              <td>扫地机 + 老人家庭</td>
+              <td>给父母买扫地机，哪些功能是真省心，哪些反而麻烦？</td>
+              <td>易操作扫地机、语音控制、售后服务</td>
+            </tr>
+            <tr>
+              <td>扫地机 + 大扫除</td>
+              <td>年末大扫除，扫地机、洗地机、吸尘器怎么分工？</td>
+              <td>清洁电器套装</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="kitchen" class="section">
+      <div class="section-title">
+        <h2>七、厨电创新选题</h2>
+        <span>重点做“安装条件判断 + 厨房动线教程 + 家庭效率提升”</span>
+      </div>
+
+      <div class="grid grid-2">
+        <div class="card topic-card kitchen">
+          <h3>厨电教程类选题</h3>
+          <ol class="topic-list">
+            <li>厨房家电装修前规划教程：冰箱、洗碗机、蒸烤箱怎么排？</li>
+            <li>零嵌冰箱安装教程：尺寸、散热、插座、开门角度都要看</li>
+            <li>洗碗机安装自测教程：你家到底能不能装？</li>
+            <li>小厨房厨电布局教程：台面不够、插座不够怎么解决？</li>
+            <li>蒸烤箱选购教程：蒸、烤、炸、微波到底要不要集成？</li>
+            <li>开放式厨房油烟机选择教程：风量之外还要看什么？</li>
+          </ol>
+        </div>
+
+        <div class="card topic-card kitchen">
+          <h3>厨电痛点解决方案</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>用户痛点</th>
+                <th>选题方向</th>
+                <th>展现重点</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>厨房太小</td>
+                <td>小厨房能不能同时放下冰箱、洗碗机和蒸烤箱？</td>
+                <td>尺寸、动线、嵌入、台面空间</td>
+              </tr>
+              <tr>
+                <td>洗碗机不知道能不能装</td>
+                <td>洗碗机安装条件自测：看完就知道你家能不能装</td>
+                <td>水电、橱柜、排水、容量、门板</td>
+              </tr>
+              <tr>
+                <td>冰箱嵌入怕翻车</td>
+                <td>零嵌冰箱最容易翻车的4个细节</td>
+                <td>散热、预留、门体、踢脚线、插座</td>
+              </tr>
+              <tr>
+                <td>厨电买了闲置</td>
+                <td>蒸烤箱、空气炸锅、微波炉，哪些家庭真用得上？</td>
+                <td>做饭频率、菜系、家庭人数、清洁难度</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:16px;">
+        <h3>厨电创新组合选题</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>组合方式</th>
+              <th>参考选题</th>
+              <th>适合植入</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>厨电 + 装修</td>
+              <td>装修前厨电规划：冰箱、洗碗机、蒸烤箱的位置怎么定？</td>
+              <td>冰箱、洗碗机、蒸烤箱、橱柜</td>
+            </tr>
+            <tr>
+              <td>厨电 + 小户型</td>
+              <td>小厨房想提升幸福感，哪些厨电优先买？</td>
+              <td>小尺寸洗碗机、嵌入式厨电、小冰箱</td>
+            </tr>
+            <tr>
+              <td>厨电 + 年货</td>
+              <td>年货囤菜季，大冰箱到底怎么分区才好用？</td>
+              <td>大容量冰箱、保鲜冰箱</td>
+            </tr>
+            <tr>
+              <td>厨电 + 家庭聚餐</td>
+              <td>中秋国庆家里聚餐，洗碗机到底能省多少事？</td>
+              <td>洗碗机、蒸烤箱、消毒柜</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="combo" class="section">
+      <div class="section-title">
+        <h2>八、跨品类组合选题</h2>
+        <span>跨品类内容更像“整体解决方案”，商业化空间更大</span>
+      </div>
+
+      <div class="card">
+        <table>
+          <thead>
+            <tr>
+              <th>组合主题</th>
+              <th>参考选题</th>
+              <th>包含品类</th>
+              <th>内容亮点</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>新房入住家电清单</td>
+              <td>新房入住第一批家电怎么买？哪些必须先买，哪些可以等？</td>
+              <td>电视、扫地机、冰箱、洗碗机</td>
+              <td>预算分层、先后顺序、装修预留</td>
+            </tr>
+            <tr>
+              <td>小户型幸福感方案</td>
+              <td>60㎡小家电器怎么配？不占地但提升幸福感</td>
+              <td>小尺寸电视、扫地机、小厨电、洗碗机</td>
+              <td>空间效率、尺寸控制、收纳</td>
+            </tr>
+            <tr>
+              <td>有娃家庭方案</td>
+              <td>有娃家庭家电怎么选？护眼、清洁、厨房效率都要考虑</td>
+              <td>护眼电视、扫地机、洗碗机、冰箱</td>
+              <td>安全、清洁、饮食、观看习惯</td>
+            </tr>
+            <tr>
+              <td>有宠家庭方案</td>
+              <td>有猫家庭最值得买的家电：清洁、除味、毛发怎么解决？</td>
+              <td>扫地机、洗地机、空气净化、冰箱</td>
+              <td>毛发、猫砂、异味、地面清洁</td>
+            </tr>
+            <tr>
+              <td>客厅娱乐方案</td>
+              <td>把客厅变成娱乐中心，电视、音响、游戏设备怎么配？</td>
+              <td>电视、回音壁、投影、游戏设备</td>
+              <td>观影、游戏、赛事、亲子娱乐</td>
+            </tr>
+            <tr>
+              <td>父母家电改造</td>
+              <td>给父母家升级家电，哪些功能是真省心？</td>
+              <td>电视、扫地机、洗碗机、冰箱</td>
+              <td>大字体、易操作、售后、维护成本</td>
+            </tr>
+            <tr>
+              <td>懒人家务方案</td>
+              <td>想少做家务，这几类家电怎么搭配最省心？</td>
+              <td>扫地机、洗碗机、烘干机、厨电</td>
+              <td>自动化、维护频率、长期体验</td>
+            </tr>
+            <tr>
+              <td>装修前全屋预留</td>
+              <td>装修前全屋家电预留清单：电视墙、厨房、阳台、扫地机基站</td>
+              <td>电视、影院、扫地机、厨电</td>
+              <td>水电、插座、网线、尺寸、柜体</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="pain" class="section">
+      <div class="section-title">
+        <h2>九、痛点刚需解决方案库</h2>
+        <span>可以作为评论区答疑、短视频切片和长视频选题来源</span>
+      </div>
+
+      <div class="grid grid-2">
+        <div class="card">
+          <h3>高频家庭痛点</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>痛点</th>
+                <th>解决方案选题</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>客厅太小</td>
+                <td>小客厅电视怎么选？尺寸、距离、挂墙高度一次讲清</td>
+              </tr>
+              <tr>
+                <td>厨房太小</td>
+                <td>小厨房厨电取舍：洗碗机、蒸烤箱、冰箱谁优先？</td>
+              </tr>
+              <tr>
+                <td>家里毛发多</td>
+                <td>有宠家庭清洁方案：扫地机、洗地机、吸尘器怎么分工？</td>
+              </tr>
+              <tr>
+                <td>不想做家务</td>
+                <td>懒人家电组合：哪些自动化功能真能省事？</td>
+              </tr>
+              <tr>
+                <td>预算有限</td>
+                <td>新房家电预算有限，哪些先买贵的，哪些可以买基础款？</td>
+              </tr>
+              <tr>
+                <td>怕安装翻车</td>
+                <td>家电安装避坑清单：电视、冰箱、洗碗机、扫地机基站</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="card">
+          <h3>高收藏解决方案</h3>
+          <ol class="topic-list">
+            <li>全屋插座预留清单：买家电前先看这一条</li>
+            <li>家电尺寸预留表：冰箱、洗碗机、电视、扫地机基站</li>
+            <li>不同户型家电购买优先级：小户型、大平层、老房改造</li>
+            <li>家电预算分配表：1万、3万、5万怎么花最值？</li>
+            <li>装修后才想买家电，哪些还能补救，哪些很难补救？</li>
+            <li>家电买回来不好用，很多时候不是产品问题，是场景没匹配</li>
+            <li>父母家电升级清单：别买复杂功能，先看操作和维护</li>
+            <li>租房党家电清单：可搬走、不打孔、不改水电</li>
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <section id="tutorial" class="section">
+      <div class="section-title">
+        <h2>十、教程类脚本模板</h2>
+        <span>适用于所有品类，特别适合做高收藏视频</span>
+      </div>
+
+      <div class="card">
+        <table>
+          <thead>
+            <tr>
+              <th>脚本段落</th>
+              <th>内容写法</th>
+              <th>示例</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>开场痛点</td>
+              <td>直接说用户正在纠结的问题，最好带具体场景。</td>
+              <td>“如果你家正在装修，想装洗碗机但不知道能不能装，这条先收藏。”</td>
+            </tr>
+            <tr>
+              <td>判断条件</td>
+              <td>列出用户必须先确认的条件。</td>
+              <td>“先看三个地方：橱柜尺寸、水电位置、排水距离。”</td>
+            </tr>
+            <tr>
+              <td>步骤拆解</td>
+              <td>用 3-5 步讲清怎么做，尽量图表化。</td>
+              <td>“第一步量宽高深，第二步看门板，第三步确认上下水。”</td>
+            </tr>
+            <tr>
+              <td>错误示范</td>
+              <td>用真实案例告诉用户哪里容易翻车。</td>
+              <td>“最常见的错误是只看机器尺寸，没算门板和踢脚线。”</td>
+            </tr>
+            <tr>
+              <td>方案推荐</td>
+              <td>按不同家庭给出不同方案。</td>
+              <td>“小户型优先看紧凑型，三口之家建议13套以上。”</td>
+            </tr>
+            <tr>
+              <td>产品接入</td>
+              <td>从解决方案自然过渡到产品，不要硬切广告。</td>
+              <td>“如果你刚好是这种厨房结构，就可以看这类零嵌/嵌入式型号。”</td>
+            </tr>
+            <tr>
+              <td>结尾总结</td>
+              <td>用清单回顾，让用户愿意收藏。</td>
+              <td>“记住这四点：尺寸、水电、散热、使用习惯。”</td>
+            </tr>
+            <tr>
+              <td>互动引导</td>
+              <td>引导用户留下户型、预算、场景。</td>
+              <td>“你可以把厨房尺寸发评论区，我帮你判断能不能装。”</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="warning" style="margin-top:16px;">
+        <strong>教程类内容的关键：</strong>
+        不要只讲“这款产品好不好”，而要让用户看完之后知道“我家能不能买、怎么买、怎么装、怎么用、怎么避坑”。
+      </div>
+    </section>
+
+    <section id="monthly" class="section">
+      <div class="section-title">
+        <h2>十一、月度创新组合排期示例</h2>
+        <span>每月可从普通选题中抽出 4-6 条做成创新解决方案型内容</span>
+      </div>
+
+      <div class="card">
+        <table>
+          <thead>
+            <tr>
+              <th>周次</th>
+              <th>内容类型</th>
+              <th>选题</th>
+              <th>涉及品类</th>
+              <th>展现重点</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>第1周</td>
+              <td>教程</td>
+              <td>装修前全屋家电预留清单：电视墙、厨房、扫地机基站</td>
+              <td>电视、厨电、扫地机</td>
+              <td>插座、水电、网线、尺寸、动线</td>
+            </tr>
+            <tr>
+              <td>第1周</td>
+              <td>自测</td>
+              <td>一分钟自测：你家到底适合买85寸还是98寸电视？</td>
+              <td>电视</td>
+              <td>观看距离、开间、预算、使用场景</td>
+            </tr>
+            <tr>
+              <td>第2周</td>
+              <td>真实实验</td>
+              <td>有猫家庭扫地机生存挑战：猫毛、猫砂、宠物碗一次测</td>
+              <td>扫地机</td>
+              <td>毛发、避障、边角、基站维护</td>
+            </tr>
+            <tr>
+              <td>第2周</td>
+              <td>预算拆解</td>
+              <td>1万元客厅娱乐预算，电视和回音壁怎么分？</td>
+              <td>电视、家庭影院</td>
+              <td>显示、声音、游戏、观影</td>
+            </tr>
+            <tr>
+              <td>第3周</td>
+              <td>改造案例</td>
+              <td>帮朋友改造小厨房：冰箱、洗碗机、蒸烤箱怎么塞进去？</td>
+              <td>厨电</td>
+              <td>尺寸、动线、嵌入、台面</td>
+            </tr>
+            <tr>
+              <td>第3周</td>
+              <td>反向选购</td>
+              <td>这几类家庭，不建议盲目买旗舰扫地机</td>
+              <td>扫地机</td>
+              <td>家庭面积、地面材质、维护成本、预算</td>
+            </tr>
+            <tr>
+              <td>第4周</td>
+              <td>解决方案</td>
+              <td>有娃家庭客厅怎么配？电视护眼、声音、收纳一次解决</td>
+              <td>电视、家庭影院、收纳</td>
+              <td>安全、观看距离、亲子内容、收纳</td>
+            </tr>
+            <tr>
+              <td>第4周</td>
+              <td>清单</td>
+              <td>懒人家电组合清单：哪些真的能减少家务？</td>
+              <td>扫地机、洗碗机、厨电</td>
+              <td>自动化、维护频率、长期体验</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <div class="footer">
+      家电内容创新选题组合库 · 建议每月更新痛点库、评论问题和真实案例
+    </div>
+
+  </main>
+</div>
+</body>
+</html>
