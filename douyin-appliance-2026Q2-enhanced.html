@@ -1,0 +1,1090 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>抖音家电达人商单全景报告 · 2026Q2 强化版</title>
+<style>
+  :root {
+    --bg: #070b14;
+    --surface: #0d1321;
+    --surface2: #131c2e;
+    --border: rgba(255,255,255,0.06);
+    --text: #e8ecf2;
+    --text2: #8b95a8;
+    --text3: #5a6478;
+    --accent: #ff5e3a;
+    --accent2: #ff9f0a;
+    --blue: #0071e3;
+    --blue2: #5ac8fa;
+    --green: #30d158;
+    --green2: #66d4a8;
+    --purple: #bf5af2;
+    --purple2: #da8fff;
+    --pink: #ff375f;
+    --radius: 16px;
+    --radius-sm: 10px;
+    --shadow: 0 2px 24px rgba(0,0,0,0.3);
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: -apple-system, 'PingFang SC', 'SF Pro Display', 'Helvetica Neue', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  /* ─── HERO ─── */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 80px 40px;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 80% 60% at 50% 30%, rgba(255,94,58,0.12) 0%, transparent 60%),
+                radial-gradient(ellipse 60% 40% at 80% 70%, rgba(0,113,227,0.10) 0%, transparent 50%),
+                radial-gradient(ellipse 50% 60% at 20% 50%, rgba(191,90,242,0.08) 0%, transparent 50%);
+    z-index: 0;
+    animation: heroPulse 8s ease-in-out infinite alternate;
+  }
+  @keyframes heroPulse { 0% { opacity: 0.8; } 100% { opacity: 1.2; } }
+  .hero-content { position: relative; z-index: 1; max-width: 960px; }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 6px 18px; border-radius: 100px;
+    background: rgba(255,255,255,0.06); border: 1px solid var(--border);
+    font-size: 0.82em; color: var(--text2); margin-bottom: 28px;
+    backdrop-filter: blur(12px);
+  }
+  .hero-badge .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green); animation: dotPulse 2s infinite; }
+  @keyframes dotPulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+  .hero h1 {
+    font-size: clamp(2.5em, 5.5vw, 4em); font-weight: 800;
+    letter-spacing: -0.02em; line-height: 1.15; margin-bottom: 24px;
+    background: linear-gradient(135deg, #fff 0%, #c8d6e5 50%, #a0b4cc 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .hero p {
+    font-size: 1.15em; color: var(--text2); max-width: 680px;
+    margin: 0 auto 36px; line-height: 1.7;
+  }
+  .hero-stats { display: flex; gap: 4px; flex-wrap: wrap; justify-content: center; }
+  .hero-stat {
+    background: var(--surface2); border: 1px solid var(--border);
+    padding: 20px 28px; border-radius: var(--radius);
+    text-align: center; min-width: 140px; transition: transform 0.2s, border-color 0.2s;
+  }
+  .hero-stat:hover { transform: translateY(-4px); border-color: var(--accent); }
+  .hero-stat .val { font-size: 1.8em; font-weight: 800; display: block; }
+  .hero-stat .lbl { font-size: 0.78em; color: var(--text3); margin-top: 4px; }
+  .val.red { color: var(--accent); }
+  .val.blue { color: var(--blue2); }
+  .val.amber { color: var(--accent2); }
+  .val.green { color: var(--green); }
+  .val.purple { color: var(--purple2); }
+  .val.pink { color: var(--pink); }
+
+  /* ─── NAV ─── */
+  .nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(7,11,20,0.85); backdrop-filter: blur(24px);
+    border-bottom: 1px solid var(--border); padding: 0 24px;
+  }
+  .nav-inner {
+    max-width: 1280px; margin: 0 auto;
+    display: flex; gap: 4px; overflow-x: auto; padding: 10px 0;
+    scrollbar-width: none;
+  }
+  .nav-inner::-webkit-scrollbar { display: none; }
+  .nav a {
+    color: var(--text2); text-decoration: none; padding: 10px 20px;
+    border-radius: 8px; font-size: 0.88em; font-weight: 500;
+    white-space: nowrap; transition: all 0.2s;
+  }
+  .nav a:hover, .nav a.active { background: rgba(255,94,58,0.15); color: var(--accent); }
+
+  /* ─── SECTIONS ─── */
+  .section {
+    max-width: 1280px; margin: 0 auto; padding: 80px 32px;
+  }
+  .section-header { margin-bottom: 48px; }
+  .section-label {
+    font-size: 0.78em; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 2px; color: var(--accent); margin-bottom: 8px;
+  }
+  .section-title {
+    font-size: 2em; font-weight: 800; letter-spacing: -0.02em;
+    margin-bottom: 12px;
+  }
+  .section-desc { color: var(--text2); font-size: 0.95em; max-width: 560px; }
+
+  /* ─── GRID ─── */
+  .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 20px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; }
+  .grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+  .grid-5 { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; }
+
+  /* ─── CARD ─── */
+  .card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 32px;
+    transition: border-color 0.3s, transform 0.2s;
+  }
+  .card:hover { border-color: rgba(255,255,255,0.12); transform: translateY(-2px); }
+  .card-accent { border-left: 3px solid var(--accent); }
+  .card-blue { border-left: 3px solid var(--blue); }
+  .card-green { border-left: 3px solid var(--green); }
+  .card-purple { border-left: 3px solid var(--purple); }
+  .card-pink { border-left: 3px solid var(--pink); }
+  .card-amber { border-left: 3px solid var(--accent2); }
+
+  /* ─── TABLE ─── */
+  .table-wrapper { overflow-x: auto; border-radius: var(--radius); border: 1px solid var(--border); }
+  table { width: 100%; border-collapse: collapse; font-size: 0.9em; }
+  th {
+    background: var(--surface2); color: var(--text2); font-weight: 600;
+    padding: 14px 18px; text-align: left; border-bottom: 1px solid var(--border);
+    font-size: 0.82em; letter-spacing: 0.5px; white-space: nowrap;
+  }
+  td {
+    padding: 14px 18px; border-bottom: 1px solid var(--border);
+    color: var(--text); vertical-align: top;
+  }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: rgba(255,255,255,0.015); }
+  .tag {
+    display: inline-block; padding: 2px 10px; border-radius: 100px;
+    font-size: 0.75em; font-weight: 600;
+  }
+  .tag-red { background: rgba(255,94,58,0.15); color: var(--accent); }
+  .tag-green { background: rgba(48,209,88,0.15); color: var(--green); }
+  .tag-blue { background: rgba(0,113,227,0.15); color: var(--blue2); }
+  .tag-purple { background: rgba(191,90,242,0.15); color: var(--purple2); }
+  .tag-amber { background: rgba(255,159,10,0.15); color: var(--accent2); }
+  .tag-pink { background: rgba(255,55,95,0.15); color: var(--pink); }
+
+  /* ─── TIMELINE ─── */
+  .timeline { position: relative; padding-left: 32px; }
+  .timeline::before {
+    content: ''; position: absolute; left: 8px; top: 0; bottom: 0;
+    width: 2px; background: var(--border);
+  }
+  .timeline-item { position: relative; margin-bottom: 32px; }
+  .timeline-item::before {
+    content: ''; position: absolute; left: -28px; top: 6px;
+    width: 12px; height: 12px; border-radius: 50%;
+    background: var(--accent); border: 2px solid var(--bg);
+  }
+  .timeline-date { font-size: 0.78em; color: var(--accent); font-weight: 600; margin-bottom: 4px; }
+  .timeline-title { font-weight: 700; font-size: 1.05em; margin-bottom: 4px; }
+  .timeline-desc { color: var(--text2); font-size: 0.9em; }
+
+  /* ─── CHART BAR ─── */
+  .bar-group { display: flex; flex-direction: column; gap: 10px; }
+  .bar-row { display: flex; align-items: center; gap: 12px; }
+  .bar-label { width: 120px; font-size: 0.85em; color: var(--text2); text-align: right; flex-shrink: 0; }
+  .bar-track { flex: 1; height: 28px; background: var(--surface2); border-radius: 6px; overflow: hidden; }
+  .bar-fill {
+    height: 100%; border-radius: 6px; display: flex; align-items: center;
+    padding-left: 10px; font-size: 0.78em; font-weight: 700; color: #fff;
+    transition: width 1s ease-out;
+  }
+  .bar-fill.red { background: linear-gradient(90deg, var(--accent), rgba(255,94,58,0.4)); }
+  .bar-fill.blue { background: linear-gradient(90deg, var(--blue), rgba(0,113,227,0.4)); }
+  .bar-fill.green { background: linear-gradient(90deg, var(--green), rgba(48,209,88,0.4)); }
+  .bar-fill.purple { background: linear-gradient(90deg, var(--purple), rgba(191,90,242,0.4)); }
+  .bar-fill.amber { background: linear-gradient(90deg, var(--accent2), rgba(255,159,10,0.4)); }
+  .bar-fill.pink { background: linear-gradient(90deg, var(--pink), rgba(255,55,95,0.4)); }
+
+  /* ─── STAT NUMBERS ─── */
+  .big-number {
+    font-size: 3em; font-weight: 800; letter-spacing: -0.03em;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    line-height: 1.2;
+  }
+  .big-number.green { background: linear-gradient(135deg, var(--green), var(--green2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .big-number.blue { background: linear-gradient(135deg, var(--blue), var(--blue2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .big-number.purple { background: linear-gradient(135deg, var(--purple), var(--purple2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+  /* ─── SOURCE ─── */
+  .source { font-size: 0.75em; color: var(--text3); margin-top: 8px; }
+  .source a { color: var(--text3); }
+  .footnote { color: var(--text3); font-size: 0.72em; margin-top: 3px; }
+
+  /* ─── ALERT BOX ─── */
+  .alert {
+    background: rgba(255,94,58,0.08); border: 1px solid rgba(255,94,58,0.2);
+    border-radius: var(--radius-sm); padding: 20px 24px;
+    margin: 24px 0;
+  }
+  .alert-title { font-weight: 700; color: var(--accent); margin-bottom: 6px; }
+  .alert p { color: var(--text2); font-size: 0.9em; }
+
+  /* ─── FOOTER ─── */
+  .footer {
+    text-align: center; padding: 60px 32px;
+    border-top: 1px solid var(--border); color: var(--text3); font-size: 0.85em;
+  }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 768px) {
+    .section { padding: 48px 20px; }
+    .hero { padding: 60px 20px; }
+    .hero-stats { flex-direction: column; align-items: stretch; }
+    .hero-stat { min-width: auto; }
+    .grid-2, .grid-3, .grid-4, .grid-5 { grid-template-columns: 1fr; }
+    .bar-label { width: 80px; font-size: 0.75em; }
+    .timeline { padding-left: 24px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════ HERO ═══════════════ -->
+<section class="hero" id="top">
+  <div class="hero-content">
+    <div class="hero-badge">
+      <span class="dot"></span> 数据更新至 2026年6月13日 · 618 第一阶段实时
+    </div>
+    <h1>抖音家电<br>达人商单全景报告</h1>
+    <p>覆盖大家电、厨电、环境电器全品类。基于 2026 年 618 第一阶段战报、纯佣商单灰度测试、精选联盟费率改革等最新数据，提供品牌方商单投放决策参考。</p>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <span class="val red">+325%</span>
+        <span class="lbl">618 破亿商家 YoY</span>
+      </div>
+      <div class="hero-stat">
+        <span class="val blue">15万+</span>
+        <span class="lbl">参与带货达人</span>
+      </div>
+      <div class="hero-stat">
+        <span class="val green">+78%</span>
+        <span class="lbl">店播破千万 YoY</span>
+      </div>
+      <div class="hero-stat">
+        <span class="val purple">5-80%</span>
+        <span class="lbl">纯佣商单佣金范围</span>
+      </div>
+      <div class="hero-stat">
+        <span class="val amber">7月8日</span>
+        <span class="lbl">精选联盟费率改革</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ NAV ═══════════════ -->
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <a href="#618" class="active">618战报</a>
+    <a href="#platform">平台数据</a>
+    <a href="#smart-home">智能家居</a>
+    <a href="#categories">品类拆解</a>
+    <a href="#pure-commission">纯佣新政</a>
+    <a href="#rate-reform">费率改革</a>
+    <a href="#creators">达人报价</a>
+    <a href="#commission">佣金体系</a>
+    <a href="#cases">品牌案例</a>
+    <a href="#calendar">投放日历</a>
+    <a href="#sources">数据来源</a>
+  </div>
+</nav>
+
+<!-- ═══════════════ 618 战报 ═══════════════ -->
+<section class="section" id="618">
+  <div class="section-header">
+    <div class="section-label">&#9670; Breaking Data</div>
+    <div class="section-title">2026 抖音 618 第一阶段战报</div>
+    <div class="section-desc">5月15日好物节开启至第一阶段结束，百亿消费券补贴与优质内容供给高效协同。数据来源：抖音电商官方、央广网、亿邦动力。</div>
+  </div>
+
+  <div class="grid-4" style="margin-bottom: 24px;">
+    <div class="card card-accent" style="text-align:center;">
+      <div class="big-number">+325%</div>
+      <div style="color:var(--text2); margin-top:8px;">成交额破亿元商家数 YoY</div>
+      <div class="source">来源：抖音电商官报 2026.05.21</div>
+    </div>
+    <div class="card card-blue" style="text-align:center;">
+      <div class="big-number blue">+300%</div>
+      <div style="color:var(--text2); margin-top:8px;">成交额破亿爆款单品数 YoY</div>
+      <div class="source">来源：网经社 2026.05.22</div>
+    </div>
+    <div class="card card-green" style="text-align:center;">
+      <div class="big-number green">+161%</div>
+      <div style="color:var(--text2); margin-top:8px;">搜索成交额破千万商家数 YoY</div>
+      <div class="source">来源：抖音电商 618 数据</div>
+    </div>
+    <div class="card card-purple" style="text-align:center;">
+      <div class="big-number purple">5x</div>
+      <div style="color:var(--text2); margin-top:8px;">15万+达人带货成交额 YoY</div>
+      <div class="source">来源：亿邦动力 2026.05.22</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3 style="margin-bottom:16px;">内容场 × 货架场 双引擎增速</h3>
+    <div class="bar-group">
+      <div class="bar-row">
+        <span class="bar-label">店播破千万</span>
+        <div class="bar-track"><div class="bar-fill red" style="width:78%">+78%</div></div>
+      </div>
+      <div class="bar-row">
+        <span class="bar-label">短视频破千万</span>
+        <div class="bar-track"><div class="bar-fill blue" style="width:100%">+100%</div></div>
+      </div>
+      <div class="bar-row">
+        <span class="bar-label">商城破百万</span>
+        <div class="bar-track"><div class="bar-fill green" style="width:58%">+58%</div></div>
+      </div>
+      <div class="bar-row">
+        <span class="bar-label">搜索破千万</span>
+        <div class="bar-track"><div class="bar-fill purple" style="width:90%">+161%</div></div>
+      </div>
+      <div class="bar-row">
+        <span class="bar-label">短视频破百万(券)</span>
+        <div class="bar-track"><div class="bar-fill amber" style="width:100%">+200%</div></div>
+      </div>
+    </div>
+    <div class="source" style="margin-top:16px;">来源：抖音电商《2026年抖音商城618第一阶段数据报告》、央广网 2026.05.22、亿邦动力</div>
+  </div>
+</section>
+
+<!-- ═══════════════ 平台数据 ═══════════════ -->
+<section class="section" id="platform">
+  <div class="section-header">
+    <div class="section-label">&#9670; Platform Overview</div>
+    <div class="section-title">抖音电商家电大盘</div>
+    <div class="section-desc">结合 2025 年度 + 2026Q1 最新数据，呈现家电品类在抖音的全域表现。数据来源：巨量引擎白皮书、奥维云网、飞瓜数据。</div>
+  </div>
+
+  <div class="grid-3">
+    <div class="card card-accent">
+      <h4 style="color:var(--accent); font-size:1.1em; margin-bottom:12px;">GMV 增速</h4>
+      <div class="big-number" style="font-size:2.2em;">+67%</div>
+      <p style="color:var(--text2); margin-top:8px;">2025 全年家电 GMV 同比增速。其中数码家电在双11期间同比+242%。2026Q1受整体消费调整影响有所放缓，但618第一阶段破亿商家+325%，反弹信号明确。</p>
+      <div class="source">来源：飞瓜数据《2025抖音电商数码家电营销趋势报告》</div>
+    </div>
+    <div class="card card-blue">
+      <h4 style="color:var(--blue2); font-size:1.1em; margin-bottom:12px;">购买转化率</h4>
+      <div class="big-number blue" style="font-size:2.2em;">46%</div>
+      <p style="color:var(--text2); margin-top:8px;">一周内购买转化率。家电作为高客单价长决策品类，在抖音通过"内容种草→搜索比价→直播间成交"路径显著缩短决策周期。</p>
+      <div class="source">来源：巨量引擎《2025家电行业白皮书》</div>
+    </div>
+    <div class="card card-green">
+      <h4 style="color:var(--green); font-size:1.1em; margin-bottom:12px;">商单预算</h4>
+      <div class="big-number green" style="font-size:2.2em;">300-500万</div>
+      <p style="color:var(--text2); margin-top:8px;">头部家电品牌单平台（抖音/小红书）年度达人合作预算区间。含星图商单+直播坑位费+纯佣合作。</p>
+      <div class="source">来源：飞瓜数据行业调研、品牌招标公告 2025.08</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ 智能家居 ═══════════════ -->
+<section class="section" id="smart-home">
+  <div class="section-header">
+    <div class="section-label">&#9670; 618 Dark Horse</div>
+    <div class="section-title">智能家居：2026 年 618 最大黑马</div>
+    <div class="section-desc">消费降级背景下，"解放双手"的生活升级需求逆势增长。扫地机器人、智能门锁等 GMV 同比增长超 60%，成为全品类最大黑马。数据来源：2026年618数据复盘（百家号 2026.06.04）。</div>
+  </div>
+
+  <div class="grid-3" style="margin-bottom: 24px;">
+    <div class="card card-accent" style="text-align:center;">
+      <div class="big-number" style="font-size:2.5em;">+60%+</div>
+      <div style="color:var(--text2); margin-top:8px;">智能家居整体 GMV YoY</div>
+    </div>
+    <div class="card card-blue" style="text-align:center;">
+      <div class="big-number blue" style="font-size:2.5em;">+40%+</div>
+      <div style="color:var(--text2); margin-top:8px;">户外运动 GMV YoY</div>
+    </div>
+    <div class="card card-green" style="text-align:center;">
+      <div class="big-number green" style="font-size:2.5em;">+8.2%</div>
+      <div style="color:var(--text2); margin-top:8px;">618 全网总销售额 YoY<br><span style="font-size:0.8em;color:var(--text3);">~10218亿元</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3 style="margin-bottom:16px;">家用电器 618 品类表现速览</h3>
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr><th>品类</th><th>618表现</th><th>增长驱动力</th><th>代表品牌</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>扫地机器人</strong></td>
+            <td><span class="tag tag-green">+60%+ GMV</span></td>
+            <td>AI路径规划、全屋清洁升级、懒人经济</td>
+            <td>石头、科沃斯、追觅、云鲸</td>
+          </tr>
+          <tr>
+            <td><strong>智能门锁</strong></td>
+            <td><span class="tag tag-green">+60%+ GMV</span></td>
+            <td>安防升级、3D人脸识别、租房市场</td>
+            <td>德施曼、凯迪仕、小米</td>
+          </tr>
+          <tr>
+            <td><strong>空气净化器</strong></td>
+            <td><span class="tag tag-green">持续高增长</span></td>
+            <td>健康意识、除甲醛需求、新房装修</td>
+            <td>小米、戴森、飞利浦</td>
+          </tr>
+          <tr>
+            <td><strong>净水器</strong></td>
+            <td><span class="tag tag-blue">稳步增长</span></td>
+            <td>水安全意识、即热式、厨下式</td>
+            <td>小米、美的、安吉尔</td>
+          </tr>
+          <tr>
+            <td><strong>电视</strong></td>
+            <td><span class="tag tag-amber">结构升级</span></td>
+            <td>MiniLED下放、大屏化、游戏需求</td>
+            <td>TCL、海信、小米、创维</td>
+          </tr>
+          <tr>
+            <td><strong>空调</strong></td>
+            <td><span class="tag tag-amber">季节性升温</span></td>
+            <td>夏季需求、以旧换新、新一级能效</td>
+            <td>格力、美的、海尔</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="source" style="margin-top:12px;">来源：2026年618数据复盘（百家号 2026.06.04）、奥维云网 Q1数据</div>
+  </div>
+
+  <div class="alert" style="margin-top: 24px;">
+    <div class="alert-title">&#9888; 关键洞察：量增价跌</div>
+    <p>综合电商客单价同比下滑约 5%，但订单量增长超 15%。消费者偏好"平价多件"策略，家电品牌需在保持品质感的同时适配价格敏感型消费。这对达人内容策略提出新要求——从"高端种草"转向"质价比叙事"。</p>
+    <div class="source">来源：2026年618数据复盘</div>
+  </div>
+</section>
+
+<!-- ═══════════════ 品类拆解 ═══════════════ -->
+<section class="section" id="categories">
+  <div class="section-header">
+    <div class="section-label">&#9670; Category Deep Dive</div>
+    <div class="section-title">全品类规模与达人策略</div>
+    <div class="section-desc">三大类 12 个细分品类。数据综合 2026 Q1 奥维云网零售监测 + 巨量引擎白皮书 + 飞瓜数据估算。</div>
+  </div>
+
+  <!-- 大家电 -->
+  <h3 style="margin: 32px 0 16px; font-size: 1.3em; color: var(--accent);">&#9608; 大家电</h3>
+  <div class="table-wrapper">
+    <table>
+      <thead>
+        <tr><th>品类</th><th>Q1零售规模</th><th>YoY</th><th>抖音渠道特征</th><th>推荐达人类型</th><th>建议佣金</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>彩电</strong></td>
+          <td>约 280 亿</td>
+          <td><span class="tag tag-amber">-3.1%</span></td>
+          <td>MiniLED 搜索量暴增，游戏电视是内容流量入口</td>
+          <td>科技测评 / 家居装修 / 游戏UP主</td>
+          <td>5-8%</td>
+        </tr>
+        <tr>
+          <td><strong>空调</strong></td>
+          <td>约 420 亿</td>
+          <td><span class="tag tag-red">-13.8%</span></td>
+          <td>季节性差异大，618 前集中爆发，店播为核心转化场</td>
+          <td>家电测评 / 生活家居 / 装修类</td>
+          <td>3-6%</td>
+        </tr>
+        <tr>
+          <td><strong>冰箱</strong></td>
+          <td>约 280 亿</td>
+          <td><span class="tag tag-amber">-3.3%</span></td>
+          <td>嵌入式/法式多门为内容热点，场景化种草为主</td>
+          <td>美食 / 家居收纳 / 装修设计</td>
+          <td>5-8%</td>
+        </tr>
+        <tr>
+          <td><strong>洗衣机</strong></td>
+          <td>约 190 亿</td>
+          <td><span class="tag tag-amber">-3.0%</span></td>
+          <td>洗烘套装带动客单价提升，母婴场景是核心内容方向</td>
+          <td>母婴 / 家居生活 / 家电测评</td>
+          <td>5-8%</td>
+        </tr>
+        <tr>
+          <td><strong>厨房大电</strong></td>
+          <td>约 230 亿</td>
+          <td><span class="tag tag-red">-10.1%</span></td>
+          <td>油烟机/灶具/洗碗机为主，新装&换装双驱动</td>
+          <td>美食 / 装修 / 家居设计</td>
+          <td>3-6%</td>
+        </tr>
+        <tr>
+          <td><strong>厨房小电</strong></td>
+          <td>约 85 亿</td>
+          <td><span class="tag tag-amber">-1.6%</span></td>
+          <td>空气炸锅/破壁机/咖啡机，低客单高频，适合直播起量</td>
+          <td>美食 / 生活 / 学生宿舍好物</td>
+          <td>10-20%</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 环境电器 -->
+  <h3 style="margin: 40px 0 16px; font-size: 1.3em; color: var(--green);">&#9608; 环境电器 / 清洁电器</h3>
+  <div class="table-wrapper">
+    <table>
+      <thead>
+        <tr><th>品类</th><th>Q1零售规模</th><th>YoY</th><th>抖音渠道特征</th><th>推荐达人类型</th><th>建议佣金</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>清洁电器</strong></td>
+          <td>约 85 亿</td>
+          <td><span class="tag tag-green">-0.2%</span></td>
+          <td>618最大黑马(+60%+)，扫地机/洗地机双引擎，抖音为第一大渠道</td>
+          <td>科技测评 / 家居收纳 / 宠物</td>
+          <td>8-15%</td>
+        </tr>
+        <tr>
+          <td><strong>空气净化器</strong></td>
+          <td>约 30 亿</td>
+          <td><span class="tag tag-green">稳步增长</span></td>
+          <td>"为健康投资"持续升温，除甲醛/新风功能为内容核心</td>
+          <td>家居 / 母婴 / 科技</td>
+          <td>8-15%</td>
+        </tr>
+        <tr>
+          <td><strong>净水器</strong></td>
+          <td>约 45 亿</td>
+          <td><span class="tag tag-blue">稳步增长</span></td>
+          <td>即热式净饮一体机为主力，内容侧重"水质安全"叙事</td>
+          <td>母婴 / 健康生活 / 家电</td>
+          <td>8-15%</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="source" style="margin-top:16px;">来源：奥维云网 2026Q1 中国家电市场总结（界面新闻 2026.04）、巨量引擎《2025家电行业白皮书》、飞瓜数据</div>
+</section>
+
+<!-- ═══════════════ 纯佣新政 ═══════════════ -->
+<section class="section" id="pure-commission">
+  <div class="section-header">
+    <div class="section-label">&#9670; Just Dropped</div>
+    <div class="section-title">纯佣商单：告别坑位费时代</div>
+    <div class="section-desc">抖音电商 2026 年 6 月上线的重磅功能，正在灰度测试中，预计 6 月中旬全量开放。这是抖音商达合作模式的最大变革。</div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card card-accent">
+      <h3 style="margin-bottom:16px;">纯佣商单核心规则</h3>
+      <div class="bar-row" style="margin-bottom:8px;">
+        <span style="color:var(--text2); font-size:0.85em; width:120px;">佣金范围</span>
+        <span style="font-weight:700; color:var(--accent);">5% - 80%</span>
+      </div>
+      <div class="bar-row" style="margin-bottom:8px;">
+        <span style="color:var(--text2); font-size:0.85em; width:120px;">稿费</span>
+        <span style="font-weight:700; color:var(--green);">零</span>
+      </div>
+      <div class="bar-row" style="margin-bottom:8px;">
+        <span style="color:var(--text2); font-size:0.85em; width:120px;">调高佣金</span>
+        <span style="font-weight:700; color:var(--green);">立即生效</span>
+      </div>
+      <div class="bar-row" style="margin-bottom:8px;">
+        <span style="color:var(--text2); font-size:0.85em; width:120px;">调低佣金</span>
+        <span style="font-weight:700; color:var(--amber);">次日生效</span>
+      </div>
+      <div class="bar-row" style="margin-bottom:8px;">
+        <span style="color:var(--text2); font-size:0.85em; width:120px;">沟通成本</span>
+        <span style="font-weight:700; color:var(--green);">零 — 无需私聊</span>
+      </div>
+      <div style="margin-top:16px;">
+        <span class="tag tag-green" style="font-size:0.85em;">&#128293; 灰度测试中</span>
+        <span class="tag tag-blue" style="font-size:0.85em; margin-left:6px;">6月中旬全量开放</span>
+      </div>
+      <div class="source" style="margin-top:12px;">来源：亿邦动力 2026.06.08 / 卖家之家 2026.06.09</div>
+    </div>
+
+    <div class="card card-green">
+      <h3 style="margin-bottom:16px;">对家电品牌意味着什么？</h3>
+      <div style="font-size:0.9em; color:var(--text2); line-height:1.8;">
+        <p><strong style="color:var(--green);">&#10004; 降低试错成本</strong> — 无需预付坑位费，按实际成交付费，ROI 更可控</p>
+        <p><strong style="color:var(--green);">&#10004; 快速规模化</strong> — 无需逐一商务洽谈，可批量开放达人合作</p>
+        <p><strong style="color:var(--green);">&#10004; 精准激励</strong> — 对不同能力的达人给出差异化佣金，强者多拿</p>
+        <p><strong style="color:var(--amber);">&#9888; 选品挑战</strong> — 不支持免费样品链接，品牌需优化样品策略</p>
+        <p><strong style="color:var(--accent);">&#9888; 竞争加剧</strong> — 同类商品佣金公开化，达人会优选高佣金品</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:20px;">
+    <h3 style="margin-bottom:16px;">纯佣 vs 稿费 vs 投广双佣：家电品牌三大合作模式对比</h3>
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr><th>维度</th><th>纯佣商单 <span class="tag tag-green">NEW</span></th><th>稿费商单</th><th>投广双佣金</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>稿费/坑位费</td><td><span class="tag tag-green">零</span></td><td>有（星图报价）</td><td>有（星图稿费）</td>
+          </tr>
+          <tr>
+            <td>佣金</td><td>5-80%（自主设定）</td><td>额外协商</td><td>日常30% / 投广期间5%</td>
+          </tr>
+          <tr>
+            <td>适用场景</td><td>中小达人矩阵 / 新品测试</td><td>头部达人 / 品牌曝光</td><td>高利润品类 / 大促集中引爆</td>
+          </tr>
+          <tr>
+            <td>家电推荐</td><td>厨房小电、清洁电器、配件</td><td>大家电（电视/空调/冰箱）</td><td>扫地机、净水器、空气净化器</td>
+          </tr>
+          <tr>
+            <td>沟通成本</td><td><span class="tag tag-green">极低</span></td><td>中等</td><td>高（需商务+运营对接）</td>
+          </tr>
+          <tr>
+            <td>达人侧风险</td><td>零（按成交结算）</td><td>低（稿费已到手）</td><td>中（需配合投流排期）</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="source" style="margin-top:12px;">来源：亿邦动力 2026.06.08、新浪科技 2026.01.08</div>
+  </div>
+</section>
+
+<!-- ═══════════════ 费率改革 ═══════════════ -->
+<section class="section" id="rate-reform">
+  <div class="section-header">
+    <div class="section-label">&#9670; Upcoming Reform</div>
+    <div class="section-title">精选联盟费率改革：7月8日起生效</div>
+    <div class="section-desc">从固定 10% 统一费率升级为 A/B+/B/C/D 五档。这是抖音电商对直播生态最大的一次结构性调整。数据来源：抖音电商规则中心。</div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3 style="margin-bottom:16px;">五档费率体系</h3>
+      <div class="bar-group">
+        <div class="bar-row">
+          <span class="bar-label" style="color:var(--green);">A 级</span>
+          <div class="bar-track"><div class="bar-fill green" style="width:15%">全额返还（实际 0%）</div></div>
+        </div>
+        <div class="bar-row">
+          <span class="bar-label" style="color:var(--blue2);">B+ 级</span>
+          <div class="bar-track"><div class="bar-fill blue" style="width:35%">部分返还（&lt;10%）</div></div>
+        </div>
+        <div class="bar-row">
+          <span class="bar-label" style="color:var(--text2);">B 级</span>
+          <div class="bar-track"><div class="bar-fill" style="width:55%; background: var(--text3);">约 10%+</div></div>
+        </div>
+        <div class="bar-row">
+          <span class="bar-label" style="color:var(--accent2);">C 级</span>
+          <div class="bar-track"><div class="bar-fill amber" style="width:70%">高于 B 级</div></div>
+        </div>
+        <div class="bar-row">
+          <span class="bar-label" style="color:var(--accent);">D 级</span>
+          <div class="bar-track"><div class="bar-fill red" style="width:90%">最高 40%</div></div>
+        </div>
+      </div>
+      <div class="source" style="margin-top:16px;">来源：抖音电商《精选联盟推广费/服务费结算规则》修订公告 2026.06</div>
+    </div>
+
+    <div class="card card-purple">
+      <h3 style="margin-bottom:16px;">五维考核标准</h3>
+      <div style="font-size:0.9em; color:var(--text2); line-height:1.9;">
+        <p><strong style="color:var(--purple2);">1. 合规经营</strong> — 资质合规 + 经营合规</p>
+        <p><strong style="color:var(--purple2);">2. 结算健康度</strong> — 退货率 + 回款稳定性</p>
+        <p><strong style="color:var(--purple2);">3. 稳定经营</strong> — 经营持续性、稳定性</p>
+        <p><strong style="color:var(--purple2);">4. 内容能力</strong> — 直播/短视频质量与合规</p>
+        <p><strong style="color:var(--purple2);">5. 带货能力</strong> — 实际转化效果（非 GMV 绝对值）</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="alert" style="margin-top: 24px;">
+    <div class="alert-title">&#9888; 对家电品牌的影响</div>
+    <p><strong>达人重新洗牌</strong> — A/B+ 达人将更稀缺，品牌需提前锁定优质达人合作；D级达人面临淘汰，与其合作的品牌需及时切换。<br><br>
+    <strong>佣金预算重构</strong> — 优质达人的实际费率降低，品牌可将节省部分转为达人佣金激励，实现"双赢"。品牌可优先选择 A/B+ 达人建立长期纯佣合作。<br><br>
+    <strong>时效紧迫</strong> — 距离 7月8日生效仅剩不到 1 个月，品牌需尽快完成达人评估和合作切换。</p>
+    <div class="source">生效日期：2026年7月8日</div>
+  </div>
+</section>
+
+<!-- ═══════════════ 达人报价 ═══════════════ -->
+<section class="section" id="creators">
+  <div class="section-header">
+    <div class="section-label">&#9670; Creator Pricing</div>
+    <div class="section-title">抖音家电达人商单报价参考</div>
+    <div class="section-desc">基于星图平台公开报价 + 行业调研估算。实际价格受账号垂直度、互动率、近期表现等因素波动。注：2026年4月起佣金最低5%。</div>
+  </div>
+
+  <div class="table-wrapper" style="margin-bottom: 24px;">
+    <table>
+      <thead>
+        <tr><th>粉丝量级</th><th>视频商单</th><th>直播专场</th><th>纯佣佣金</th><th>适配家电品类</th><th>投放策略</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>1000万+</strong><br><span style="color:var(--text3); font-size:0.8em;">疯狂小杨哥/广东夫妇</span></td>
+          <td>20-50万/条</td>
+          <td>50-200万/场</td>
+          <td>5-10%</td>
+          <td>全品类品牌曝光</td>
+          <td><span class="tag tag-red">品宣为主</span></td>
+        </tr>
+        <tr>
+          <td><strong>500-1000万</strong><br><span style="color:var(--text3); font-size:0.8em;">罗永浩/董先生等</span></td>
+          <td>8-20万/条</td>
+          <td>20-80万/场</td>
+          <td>5-15%</td>
+          <td>大家电、数码</td>
+          <td><span class="tag tag-amber">品效结合</span></td>
+        </tr>
+        <tr>
+          <td><strong>100-500万</strong><br><span style="color:var(--text3); font-size:0.8em;">垂直家电测评达人</span></td>
+          <td>3-15万/条</td>
+          <td>5-20万/场</td>
+          <td>8-20%</td>
+          <td>电视/扫地机/厨电</td>
+          <td><span class="tag tag-blue">主力投放区间</span></td>
+        </tr>
+        <tr>
+          <td><strong>50-100万</strong><br><span style="color:var(--text3); font-size:0.8em;">垂类核心达人</span></td>
+          <td>1-5万/条</td>
+          <td>2-8万/场</td>
+          <td>10-25%</td>
+          <td>特定品类深度测评</td>
+          <td><span class="tag tag-green">高ROI</span></td>
+        </tr>
+        <tr>
+          <td><strong>10-50万</strong><br><span style="color:var(--text3); font-size:0.8em;">成长型达人</span></td>
+          <td>3000-2万/条</td>
+          <td>5000-3万/场</td>
+          <td>15-30%</td>
+          <td>厨房小电/清洁电器</td>
+          <td><span class="tag tag-green">矩阵铺量</span></td>
+        </tr>
+        <tr>
+          <td><strong>1-10万</strong><br><span style="color:var(--text3); font-size:0.8em;">KOC素人</span></td>
+          <td>500-3000/条</td>
+          <td>—</td>
+          <td>20-40%</td>
+          <td>小家电/配件/日用</td>
+          <td><span class="tag tag-purple">纯佣起量</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="source">来源：星图平台公开数据、行业调研、飞瓜数据（实际报价请登录星图平台查看）。佣金最低 5% 为 2026年4月1日起生效政策。</div>
+</section>
+
+<!-- ═══════════════ 佣金体系 ═══════════════ -->
+<section class="section" id="commission">
+  <div class="section-header">
+    <div class="section-label">&#9670; Commission Landscape</div>
+    <div class="section-title">抖音带货佣金全体系</div>
+    <div class="section-desc">2026年抖音佣金体系经历了重大变革：4月最低佣金令 → 6月纯佣商单 → 7月费率改革。层层推进，重塑商达利益分配。</div>
+  </div>
+
+  <div class="timeline">
+    <div class="timeline-item">
+      <div class="timeline-date">2026年1月</div>
+      <div class="timeline-title">投广双佣金机制推出</div>
+      <div class="timeline-desc">达人可同时设置日常佣金和投广佣金。非全域推广按日常（如30%）结算，全域推广按投广佣金（如5%）结算。为品牌自主投流提供灵活空间。</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-date">2026年4月1日</div>
+      <div class="timeline-title">最低佣金令生效：所有商品佣金 ≥ 5%</div>
+      <div class="timeline-desc">淘汰低佣劣质品。平台明确信号：交不起5%佣金的商家直接淘汰，只留下利润健康、愿意给达人分钱的优质商家。</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-date">2026年6月（灰度测试中）</div>
+      <div class="timeline-title">纯佣商单上线：零坑位费 + 5-80% 自主佣金</div>
+      <div class="timeline-desc">无需稿费、无需私聊即可合作。商家可针对不同能力达人设置差异化佣金，调高即生效。这对家电品牌的中腰部达人矩阵铺量是重大利好。</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-date">2026年7月8日（即将生效）</div>
+      <div class="timeline-title">精选联盟费率改革：A→D 五档差异费率</div>
+      <div class="timeline-desc">从固定10%升级为按合规&经营表现分档。A级全额返还（实际0%），D级升至40%。五维考核（合规/结算/稳定/内容/带货）替代唯GMV论。</div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top: 32px;">
+    <h3 style="margin-bottom:16px;">家电各品类达人佣金比例参考（2026年6月更新）</h3>
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr><th>品类</th><th>纯佣范围</th><th>头部达人</th><th>腰部达人</th><th>KOC素人</th><th>品类利润特征</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>电视</strong></td>
+          <td>3-8%</td>
+          <td>3-5%</td>
+          <td>5-8%</td>
+          <td>—</td>
+          <td>大件低利，以品宣+搜索拦截为主</td>
+        </tr>
+        <tr>
+          <td><strong>空调</strong></td>
+          <td>3-6%</td>
+          <td>3-5%</td>
+          <td>5-6%</td>
+          <td>—</td>
+          <td>季节性高周转，主靠店播</td>
+        </tr>
+        <tr>
+          <td><strong>冰箱/洗衣机</strong></td>
+          <td>5-8%</td>
+          <td>5-6%</td>
+          <td>6-8%</td>
+          <td>—</td>
+          <td>场景化种草驱动</td>
+        </tr>
+        <tr>
+          <td><strong>厨电大件</strong></td>
+          <td>3-6%</td>
+          <td>3-5%</td>
+          <td>5-6%</td>
+          <td>—</td>
+          <td>安装属性重，前置种草重要</td>
+        </tr>
+        <tr>
+          <td><strong>扫地机器人</strong></td>
+          <td>8-15%</td>
+          <td>8-12%</td>
+          <td>10-15%</td>
+          <td>15-20%</td>
+          <td>618最大黑马，达人佣金回报率最高</td>
+        </tr>
+        <tr>
+          <td><strong>空气净化器/净水器</strong></td>
+          <td>8-15%</td>
+          <td>8-10%</td>
+          <td>10-15%</td>
+          <td>15-20%</td>
+          <td>健康概念加持，高利润空间</td>
+        </tr>
+        <tr>
+          <td><strong>厨房小电</strong></td>
+          <td>10-20%</td>
+          <td>10-15%</td>
+          <td>15-20%</td>
+          <td>20-30%</td>
+          <td>低客单高频次，纯佣矩阵铺量首选</td>
+        </tr>
+        <tr>
+          <td><strong>个护电器</strong></td>
+          <td>15-30%</td>
+          <td>15-20%</td>
+          <td>20-25%</td>
+          <td>25-35%</td>
+          <td>高毛利品类，佣金最具吸引力</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="source" style="margin-top:12px;">来源：精选联盟数据、行业调研、爱企查/知乎佣金分析 2026.06</div>
+  </div>
+</section>
+
+<!-- ═══════════════ 品牌案例 ═══════════════ -->
+<section class="section" id="cases">
+  <div class="section-header">
+    <div class="section-label">&#9670; Brand Cases</div>
+    <div class="section-title">品牌实战案例</div>
+    <div class="section-desc">头部家电品牌在抖音的投放策略与成果。数据来源：公开报道、品牌战报、第三方监测。</div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card card-accent">
+      <h4 style="color:var(--accent); margin-bottom:8px;">亿田集成灶 × 疯狂小杨哥</h4>
+      <p style="font-size:0.85em; color:var(--text2); margin-bottom:12px;">厨电大件达人带货标杆</p>
+      <div class="bar-row" style="margin-bottom:6px;"><span style="color:var(--text3); font-size:0.8em; width:80px;">GMV目标</span><span style="font-weight:700;">2亿元</span></div>
+      <div class="bar-row" style="margin-bottom:6px;"><span style="color:var(--text3); font-size:0.8em; width:80px;">直播场次</span><span style="font-weight:700;">年度合作框架协议</span></div>
+      <div class="bar-row"><span style="color:var(--text3); font-size:0.8em; width:80px;">模式</span><span style="font-weight:700;">头部达人专场 + 品牌自播矩阵</span></div>
+      <div class="source" style="margin-top:12px;">来源：亿田智能公告 / 新浪财经 2023.12</div>
+    </div>
+    <div class="card card-blue">
+      <h4 style="color:var(--blue2); margin-bottom:8px;">海尔 × 全域矩阵</h4>
+      <p style="font-size:0.85em; color:var(--text2); margin-bottom:12px;">大家电全链路标杆</p>
+      <div class="bar-row" style="margin-bottom:6px;"><span style="color:var(--text3); font-size:0.8em; width:80px;">董宇辉单日</span><span style="font-weight:700;">7500万元</span></div>
+      <div class="bar-row" style="margin-bottom:6px;"><span style="color:var(--text3); font-size:0.8em; width:80px;">策略</span><span style="font-weight:700;">头部KOL + 品牌店播 + 短视频种草</span></div>
+      <div class="bar-row"><span style="color:var(--text3); font-size:0.8em; width:80px;">关键词</span><span style="font-weight:700;">官方IP化、日常化运营</span></div>
+      <div class="source" style="margin-top:12px;">来源：公开报道</div>
+    </div>
+    <div class="card card-green">
+      <h4 style="color:var(--green); margin-bottom:8px;">石头科技 · 全球第一</h4>
+      <p style="font-size:0.85em; color:var(--text2); margin-bottom:12px;">2024 出货量超 iRobot，618 扫地机品类领跑</p>
+      <div class="bar-row" style="margin-bottom:6px;"><span style="color:var(--text3); font-size:0.8em; width:80px;">全球份额</span><span style="font-weight:700;">15.2%（第一）</span></div>
+      <div class="bar-row" style="margin-bottom:6px;"><span style="color:var(--text3); font-size:0.8em; width:80px;">达人策略</span><span style="font-weight:700;">科技测评 + 家居赛道 KOC 矩阵</span></div>
+      <div class="bar-row"><span style="color:var(--text3); font-size:0.8em; width:80px;">618表现</span><span style="font-weight:700;">智能家居 +60%+ 板块核心受益者</span></div>
+      <div class="source" style="margin-top:12px;">来源：2026年618数据复盘</div>
+    </div>
+    <div class="card card-purple">
+      <h4 style="color:var(--purple2); margin-bottom:8px;">追觅 · 达人内容破圈</h4>
+      <p style="font-size:0.85em; color:var(--text2); margin-bottom:12px;">科技测评达人深度合作典范</p>
+      <div class="bar-row" style="margin-bottom:6px;"><span style="color:var(--text3); font-size:0.8em; width:80px;">策略</span><span style="font-weight:700;">垂类UP主深度测评 + 趣味内容</span></div>
+      <div class="bar-row" style="margin-bottom:6px;"><span style="color:var(--text3); font-size:0.8em; width:80px;">案例</span><span style="font-weight:700;">陈抱一合作登全站榜首</span></div>
+      <div class="bar-row"><span style="color:var(--text3); font-size:0.8em; width:80px;">效果</span><span style="font-weight:700;">单条视频带货千台</span></div>
+      <div class="source" style="margin-top:12px;">来源：公开报道</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ 投放日历 ═══════════════ -->
+<section class="section" id="calendar">
+  <div class="section-header">
+    <div class="section-label">&#9670; Annual Calendar</div>
+    <div class="section-title">2026 下半年投放节点日历</div>
+    <div class="section-desc">结合2026年已确认的营销节点和政策变化窗口，为品牌方提供投放节奏参考。</div>
+  </div>
+
+  <div class="table-wrapper">
+    <table>
+      <thead>
+        <tr><th>时间</th><th>节点</th><th>推荐品类</th><th>达人策略</th><th>特殊提示</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>6月1-18日</td>
+          <td><strong>618 冲刺期</strong></td>
+          <td>智能家居、空调、厨房小电</td>
+          <td>头部直播+店播+短视频三线并进</td>
+          <td><span class="tag tag-green">纯佣灰度中，可尝鲜</span></td>
+        </tr>
+        <tr>
+          <td>6月中旬</td>
+          <td><strong>纯佣商单全量开放</strong></td>
+          <td>全品类</td>
+          <td>批量中腰部达人纯佣合作</td>
+          <td><span class="tag tag-red">战略窗口期</span></td>
+        </tr>
+        <tr>
+          <td>7月8日</td>
+          <td><strong>精选联盟费率改革生效</strong></td>
+          <td>全品类</td>
+          <td>优先签约A/B+达人，清理D级合作</td>
+          <td><span class="tag tag-red">达人洗牌</span></td>
+        </tr>
+        <tr>
+          <td>7-8月</td>
+          <td><strong>空调旺季 / 暑期</strong></td>
+          <td>空调、冰箱、暑期小家电</td>
+          <td>电商场+店播为主，KOC短视频种草</td>
+          <td>季节性高峰</td>
+        </tr>
+        <tr>
+          <td>9月</td>
+          <td><strong>秋季家装季</strong></td>
+          <td>厨电、大家电、清洁电器</td>
+          <td>家装达人+测评达人矩阵</td>
+          <td>场景化种草黄金期</td>
+        </tr>
+        <tr>
+          <td>10-11月</td>
+          <td><strong>双11全周期</strong></td>
+          <td>全品类全年最大爆发</td>
+          <td>头部+腰部+店播全矩阵</td>
+          <td><span class="tag tag-red">预算占比最高</span></td>
+        </tr>
+        <tr>
+          <td>12月</td>
+          <td><strong>双12 / 年货节</strong></td>
+          <td>厨房小电、生活电器、礼赠家电</td>
+          <td>KOC矩阵+纯佣铺量</td>
+          <td>清库存 + 新一年预售</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="source" style="margin-top:12px;">来源：抖音电商年度营销日历 + 官方规则公告</div>
+</section>
+
+<!-- ═══════════════ 数据来源 ═══════════════ -->
+<section class="section" id="sources">
+  <div class="section-header">
+    <div class="section-label">&#9670; Sources</div>
+    <div class="section-title">数据来源与免责声明</div>
+  </div>
+
+  <div class="card">
+    <h3 style="margin-bottom:16px;">核心数据来源</h3>
+    <div class="grid-2" style="font-size:0.85em; color:var(--text2); gap:12px;">
+      <div>
+        <p><strong>平台官方</strong></p>
+        <ul style="padding-left:16px;">
+          <li>抖音电商《2026年618第一阶段数据报告》</li>
+          <li>巨量引擎《2025家电行业白皮书》</li>
+          <li>抖音电商《精选联盟推广费/服务费结算规则》2026.06</li>
+          <li>星图平台公开数据</li>
+        </ul>
+      </div>
+      <div>
+        <p><strong>第三方研究</strong></p>
+        <ul style="padding-left:16px;">
+          <li>奥维云网《2026Q1中国家电市场总结》</li>
+          <li>飞瓜数据《2025抖音电商数码家电营销趋势报告》</li>
+          <li>2026年618数据复盘（百家号 2026.06.04）</li>
+          <li>亿邦动力（纯佣商单专题 2026.06.08）</li>
+        </ul>
+      </div>
+      <div>
+        <p><strong>媒体报道</strong></p>
+        <ul style="padding-left:16px;">
+          <li>央广网 2026.05.22</li>
+          <li>网经社 2026.05.22</li>
+          <li>新浪财经 2026.06.08 / 2026.01.08</li>
+          <li>卖家之家 2026.06.09</li>
+          <li>爱企查/知乎佣金分析 2026.06</li>
+          <li>什么值得买 2026.05.22</li>
+        </ul>
+      </div>
+      <div>
+        <p><strong>免责声明</strong></p>
+        <ul style="padding-left:16px;">
+          <li>达人报价为行业估算，实际以星图平台为准</li>
+          <li>GMV数据来自第三方监测，偏差约±20-30%</li>
+          <li>佣金比例为精选联盟参考值，商家可自主设定</li>
+          <li>垂直达人TOP名单需通过蝉妈妈/飞瓜数据查询</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ FOOTER ═══════════════ -->
+<footer class="footer">
+  <p>抖音家电达人商单全景报告 · 2026Q2 强化版</p>
+  <p style="margin-top:8px;">制作日期：2026年6月13日 · 数据截止：2026年6月13日</p>
+  <p style="margin-top:4px;">赛博家电出品 · 仅供内部参考，不构成投资或商业决策建议</p>
+</footer>
+
+<script>
+// Sticky nav highlight
+const navLinks = document.querySelectorAll('.nav a');
+const sections = Array.from(navLinks).map(a => document.querySelector(a.getAttribute('href')));
+window.addEventListener('scroll', () => {
+  let current = '';
+  for (const sec of sections) {
+    if (!sec) continue;
+    const top = sec.getBoundingClientRect().top;
+    if (top <= 120) current = sec.id;
+  }
+  navLinks.forEach(a => {
+    a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+  });
+});
+</script>
+
+</body>
+</html>
