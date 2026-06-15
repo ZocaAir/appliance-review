@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>B站视频竞争力 SOP 看板</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--pink:#FB7299;--pink-light:#FF9EB5;--pink-dark:#E05A80;--bg:#1A1A2E;--bg2:#16213E;--bg3:#0F3460;--text:#E8E8E8;--text2:#A8A8B8;--text3:#6868A8;--green:#00D68F;--red:#FF4444;--blue:#4FC3F7;--yellow:#FFD93D;--orange:#FF8C42;--card:rgba(22,33,62,.85);--border:rgba(251,114,153,.2);--shadow:0 4px 24px rgba(0,0,0,.3)}
+body{font-family:'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif;background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh}
+.container{max-width:1400px;margin:0 auto;padding:20px}
+
+/* Hero */
+.hero{text-align:center;padding:40px 20px 30px;position:relative}
+.hero h1{font-size:2.4em;font-weight:800;color:var(--pink);letter-spacing:2px;margin-bottom:8px}
+.hero .sub{font-size:1.1em;color:var(--text2);max-width:800px;margin:0 auto}
+.hero-badge{display:inline-block;background:var(--pink);color:#fff;padding:4px 16px;border-radius:20px;font-size:.8em;margin-top:12px;font-weight:600}
+
+/* Nav Tabs */
+.nav-tabs{display:flex;gap:8px;justify-content:center;margin:24px 0 32px;flex-wrap:wrap}
+.nav-tab{padding:10px 24px;border-radius:24px;border:1px solid var(--border);background:var(--card);color:var(--text2);cursor:pointer;font-size:.9em;transition:all .2s}
+.nav-tab:hover,.nav-tab.active{background:var(--pink);color:#fff;border-color:var(--pink)}
+
+/* Section */
+.section{display:none;margin-bottom:32px}
+.section.active{display:block}
+.section-title{font-size:1.5em;font-weight:700;color:var(--pink);margin-bottom:20px;padding-left:16px;border-left:4px solid var(--pink)}
+.section-desc{color:var(--text2);margin-bottom:24px;padding-left:20px}
+
+/* Cards */
+.card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px;margin-bottom:20px;transition:transform .15s}
+.card:hover{transform:translateY(-2px)}
+.card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:20px}
+.card h3{color:var(--pink);font-size:1.1em;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.card h3 .icon{font-size:1.2em}
+.card p,.card li{color:var(--text2);font-size:.9em}
+.card ul{list-style:none;padding:0}
+.card ul li{padding:6px 0;border-bottom:1px solid rgba(255,255,255,.05)}
+.card ul li:last-child{border:none}
+.card ul li::before{content:'';display:inline-block;width:6px;height:6px;border-radius:50%;margin-right:8px;vertical-align:middle}
+
+/* KPI Row */
+.kpi-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px;margin-bottom:24px}
+.kpi{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;text-align:center}
+.kpi .value{font-size:2em;font-weight:800;color:var(--pink)}
+.kpi .label{font-size:.8em;color:var(--text2);margin-top:4px}
+.kpi .trend{font-size:.75em;margin-top:6px;display:inline-block;padding:2px 8px;border-radius:8px}
+.kpi .trend.up{color:var(--green);background:rgba(0,214,143,.1)}
+.kpi .trend.down{color:var(--red);background:rgba(255,68,68,.1)}
+
+/* Stakeholder Matrix */
+.matrix-table{width:100%;border-collapse:separate;border-spacing:0;background:var(--card);border-radius:12px;overflow:hidden}
+.matrix-table th{background:var(--bg3);color:var(--pink);padding:14px 16px;font-size:.85em;text-align:left;border-bottom:2px solid var(--pink)}
+.matrix-table td{padding:12px 16px;color:var(--text2);font-size:.85em;border-bottom:1px solid rgba(255,255,255,.05)}
+.matrix-table tr:hover td{background:rgba(251,114,153,.05)}
+.matrix-table .priority{display:inline-block;padding:2px 10px;border-radius:10px;font-size:.75em;font-weight:600}
+.priority.p0{background:rgba(255,68,68,.15);color:var(--red)}
+.priority.p1{background:rgba(255,140,66,.15);color:var(--orange)}
+.priority.p2{background:rgba(79,195,247,.15);color:var(--blue)}
+
+/* Chart containers */
+.chart-wrap{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px;margin-bottom:20px}
+.chart-wrap h3{color:var(--pink);margin-bottom:16px;font-size:1.1em}
+.chart-row{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+@media(max-width:768px){.chart-row{grid-template-columns:1fr}}
+
+/* SOP Flow */
+.sop-flow{display:flex;flex-direction:column;gap:16px;counter-reset:step}
+.sop-step{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px 24px;position:relative;counter-increment:step}
+.sop-step::before{content:counter(step);position:absolute;left:-8px;top:18px;width:36px;height:36px;background:var(--pink);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:1em;z-index:1}
+.sop-step h4{color:var(--pink);font-size:1em;margin-bottom:8px;margin-left:24px}
+.sop-step .details{color:var(--text2);font-size:.85em;margin-left:24px}
+.sop-step .details ul{list-style:disc;padding-left:16px;margin-top:6px}
+.sop-step .details ul li{padding:3px 0}
+.sop-arrow{text-align:center;color:var(--pink);font-size:1.5em;margin:-8px 0}
+
+/* Timeline */
+.timeline{position:relative;padding-left:40px}
+.timeline::before{content:'';position:absolute;left:18px;top:0;bottom:0;width:2px;background:var(--pink)}
+.timeline-item{position:relative;margin-bottom:24px}
+.timeline-item::before{content:'';position:absolute;left:-28px;top:8px;width:16px;height:16px;background:var(--pink);border-radius:50%;border:3px solid var(--bg)}
+.timeline-item h4{color:var(--text);font-size:.95em;margin-bottom:6px}
+.timeline-item .week-badge{display:inline-block;background:var(--pink);color:#fff;padding:2px 10px;border-radius:12px;font-size:.7em;margin-right:8px;font-weight:600}
+.timeline-item p{color:var(--text2);font-size:.85em}
+.timeline-item .actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.timeline-item .action{background:rgba(251,114,153,.1);border:1px solid var(--border);padding:6px 14px;border-radius:8px;font-size:.8em;color:var(--text2)}
+
+/* Monthly grid */
+.month-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px}
+.month-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px;position:relative}
+.month-card .month-label{position:absolute;top:-1px;left:20px;background:var(--pink);color:#fff;padding:4px 16px;border-radius:0 0 12px 12px;font-size:.8em;font-weight:600}
+.month-card h4{color:var(--text);margin-bottom:10px;margin-top:10px}
+.month-card ul{list-style:none;padding:0}
+.month-card ul li{padding:6px 0;font-size:.85em;color:var(--text2);border-bottom:1px solid rgba(255,255,255,.04)}
+.month-card ul li::before{content:'✦ ';color:var(--pink)}
+.month-card .metric{display:inline-block;font-size:.75em;margin-left:8px;padding:2px 6px;border-radius:6px}
+
+/* Action checklist */
+.checklist{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px;margin-bottom:20px}
+.checklist h3{color:var(--pink);margin-bottom:16px}
+.check-item{display:flex;align-items:flex-start;gap:12px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.05)}
+.check-item:last-child{border:none}
+.check-box{width:24px;height:24px;border:2px solid var(--border);border-radius:6px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0}
+.check-box.checked{background:var(--pink);border-color:var(--pink)}
+.check-box.checked::after{content:'✓';color:#fff;font-size:.8em}
+.check-text{color:var(--text2);font-size:.9em;flex:1}
+.check-text strong{color:var(--text)}
+.check-tag{display:inline-block;font-size:.7em;padding:2px 8px;border-radius:8px;margin-left:8px;font-weight:600}
+.check-tag.urgent{background:rgba(255,68,68,.15);color:var(--red)}
+.check-tag.week{background:rgba(79,195,247,.15);color:var(--blue)}
+.check-tag.month{background:rgba(255,140,66,.15);color:var(--orange)}
+
+/* Compare bars */
+.bar-group{margin-bottom:12px}
+.bar-label{font-size:.85em;color:var(--text2);margin-bottom:4px;display:flex;justify-content:space-between}
+.bar-track{height:8px;background:rgba(255,255,255,.06);border-radius:4px;position:relative}
+.bar-fill{height:100%;border-radius:4px;transition:width .4s}
+.bar-fill.pink{background:var(--pink)}
+.bar-fill.green{background:var(--green)}
+.bar-fill.blue{background:var(--blue)}
+.bar-fill.yellow{background:var(--yellow)}
+
+/* Tag cloud */
+.tag-cloud{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;padding:20px}
+.tag{padding:8px 16px;border-radius:20px;font-size:.85em;transition:transform .15s;cursor:default}
+.tag:hover{transform:scale(1.08)}
+.tag.t0{background:rgba(251,114,153,.2);color:var(--pink);font-weight:700;font-size:1em}
+.tag.t1{background:rgba(79,195,247,.15);color:var(--blue)}
+.tag.t2{background:rgba(255,217,61,.15);color:var(--yellow)}
+.tag.t3{background:rgba(0,214,143,.1);color:var(--green)}
+
+/* Footer */
+.footer{text-align:center;padding:24px;color:var(--text3);font-size:.8em;border-top:1px solid var(--border)}
+.footer a{color:var(--pink);text-decoration:none}
+
+/* Responsive */
+@media(max-width:600px){
+.hero h1{font-size:1.6em}
+.card-grid,.month-grid{grid-template-columns:1fr}
+.kpi-row{grid-template-columns:repeat(2,1fr)}
+.nav-tab{padding:8px 16px;font-size:.8em}
+}
+@media print{
+body{background:#fff;color:#333}
+.card,.chart-wrap,.kpi,.checklist,.month-card,.sop-step{background:#fff;border-color:#ddd}
+.section-title,.card h3,.chart-wrap h3,.kpi .value,.hero h1{color:var(--pink-dark)}
+.nav-tabs,.nav-tab{display:none}
+.section{display:block!important}
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- Hero -->
+<div class="hero">
+<h1>B站视频竞争力 SOP</h1>
+<div class="sub">三方需求拆解 × 全流程 SOP × 周/月提升路线图 — 让每一期视频都更有竞争力</div>
+<div class="hero-badge">2026年6月 · 数据驱动版</div>
+</div>
+
+<!-- Nav -->
+<div class="nav-tabs">
+<div class="nav-tab active" onclick="switchTab(0)">🎯 三方需求</div>
+<div class="nav-tab" onclick="switchTab(1)">📊 竞争力雷达</div>
+<div class="nav-tab" onclick="switchTab(2)">📋 SOP全流程</div>
+<div class="nav-tab" onclick="switchTab(3)">📅 周/月提升</div>
+<div class="nav-tab" onclick="switchTab(4)">✅ 行动清单</div>
+</div>
+
+<!-- Section 0: Three Stakeholders -->
+<div class="section active" id="sec0">
+<div class="section-title">三方需求全景图</div>
+<div class="section-desc">做最有竞争力的视频，首先要理解三方各自要什么——找到交集就是制胜点</div>
+
+<!-- KPIs -->
+<div class="kpi-row">
+<div class="kpi"><div class="value">5.6亿</div><div class="label">B站月活用户</div><div class="trend up">↑ 2025 Q2</div></div>
+<div class="kpi"><div class="value">112min</div><div class="label">日均停留时长</div><div class="trend up">↑ 用户粘性极强</div></div>
+<div class="kpi"><div class="value">280%</div><div class="label">科技类播放年增长</div><div class="trend up">↑↑ 蓝海赛道</div></div>
+<div class="kpi"><div class="value">分享 > 投币</div><div class="label">算法权重排序</div><div class="trend down">播放量权重最低</div></div>
+</div>
+
+<!-- Users -->
+<div class="card">
+<h3><span class="icon">👥</span> 用户需求矩阵</h3>
+<p style="margin-bottom:12px">B站2026消费趋势报告揭示三大深层需求：<strong>工具理性（获取解决方案）、价值认同（寻求共鸣）、精神安放（管理情绪）</strong></p>
+<table class="matrix-table">
+<thead><tr><th>需求层次</th><th>具体表现</th><th>内容对应</th><th>优先级</th></tr></thead>
+<tbody>
+<tr><td>认知颠覆</td><td>「原来是这样！」的反常识体验</td><td>揭秘类、对比类、深度解读</td><td><span class="priority p0">P0</span></td></tr>
+<tr><td>工具实用</td><td>能直接拿来用的方法/工具/模板</td><td>教程类、测评类、资源合集</td><td><span class="priority p0">P0</span></td></tr>
+<tr><td>情感共鸣</td><td>「我也经历过」的共情体验</td><td>成长故事、踩坑经历、观点表达</td><td><span class="priority p1">P1</span></td></tr>
+<tr><td>社交货币</td><td>分享出去显得自己懂行/有趣</td><td>热点解读、冷知识、行业洞察</td><td><span class="priority p1">P1</span></td></tr>
+<tr><td>审美愉悦</td><td>画面好看、节奏舒服、配乐沉浸</td><td>高质量制作、电影质感</td><td><span class="priority p2">P2</span></td></tr>
+<tr><td>社区归属</td><td>参与弹幕文化、评论区互动</td><td>话题型、争议性观点、投票互动</td><td><span class="priority p2">P2</span></td></tr>
+</tbody>
+</table>
+</div>
+
+<!-- Brands -->
+<div class="card">
+<h3><span class="icon">🏢</span> 品牌方需求矩阵</h3>
+<p style="margin-bottom:12px">品牌在B站做内容营销，核心诉求是<strong>「内容即资产」的长期主义</strong>——不是流量采买，而是关系共建</p>
+<table class="matrix-table">
+<thead><tr><th>需求层次</th><th>具体表现</th><th>内容对应</th><th>优先级</th></tr></thead>
+<tbody>
+<tr><td>受众精准</td><td>触达Z+世代核心消费群体</td><td>赛道匹配、粉丝画像分析</td><td><span class="priority p0">P0</span></td></tr>
+<tr><td>内容原生</td><td>植入不违和、尊重UP主创作自由</td><td>联合创作模式、产品融入叙事</td><td><span class="priority p0">P0</span></td></tr>
+<tr><td>互动深度</td><td>评论/弹幕/分享带来的二次传播</td><td>争议话题、使用场景、用户见证</td><td><span class="priority p1">P1</span></td></tr>
+<tr><td>品牌安全</td><td>内容价值观与品牌一致、无负面风险</td><td>选题审查、合规把控</td><td><span class="priority p1">P1</span></td></tr>
+<tr><td>长期资产</td><td>优质内容持续产生搜索长尾流量</td><td>知识型、教程型内容</td><td><span class="priority p2">P2</span></td></tr>
+<tr><td>数据可追踪</td><td>播放/互动/转化数据透明</td><td>创作中心数据、第三方监测</td><td><span class="priority p2">P2</span></td></tr>
+</tbody>
+</table>
+</div>
+
+<!-- Platform -->
+<div class="card">
+<h3><span class="icon">🎮</span> B站官方需求矩阵</h3>
+<p style="margin-bottom:12px">2026年4月B站告别「猜你喜欢」算法，全面转向<strong>AI驱动的多目标排序</strong>——完播率>互动率>点击率，分享权重最高</p>
+<table class="matrix-table">
+<thead><tr><th>需求层次</th><th>具体表现</th><th>内容对应</th><th>优先级</th></tr></thead>
+<tbody>
+<tr><td>完播率</td><td>视频能否被推向首页的核心指标</td><td>开头Hook、节奏设计、信息密度</td><td><span class="priority p0">P0</span></td></tr>
+<tr><td>深度互动</td><td>分享>投币>收藏>评论>弹幕>点赞</td><td>互动引导、社交货币型内容</td><td><span class="priority p0">P0</span></td></tr>
+<tr><td>内容原创</td><td>反对抄袭洗稿、模板化内容降权</td><td>独特视角、原创观点、个人风格</td><td><span class="priority p0">P0</span></td></tr>
+<tr><td>播放分钟数</td><td>取代播放次数的外显指标，利好中长视频</td><td>8-12分钟最优区间、不做水时长</td><td><span class="priority p1">P1</span></td></tr>
+<tr><td>生态多样性</td><td>小宇宙计划为中小UP主保留30%推荐位</td><td>非热门赛道的优质内容有扶持</td><td><span class="priority p1">P1</span></td></tr>
+<tr><td>社区文化</td><td>弹幕文化、反标题党、反商业化过度</td><td>真诚沟通、不标题党、尊重社区</td><td><span class="priority p2">P2</span></td></tr>
+</tbody>
+</table>
+</div>
+
+<!-- Intersection -->
+<div class="card">
+<h3><span class="icon">🔥</span> 三方交集 = 制胜点</h3>
+<p style="margin-bottom:16px">同时满足三方需求的内容类型，就是最有竞争力的选题方向：</p>
+<div class="card-grid">
+<div style="background:rgba(251,114,153,.08);border-radius:12px;padding:16px;border:1px solid var(--border)">
+<div style="color:var(--pink);font-weight:700;margin-bottom:6px">🔥 认知颠覆 × 完播率 × 社交货币</div>
+<div style="color:var(--text2);font-size:.85em">「反常识揭秘」型内容 — 用户得到认知冲击，平台得到高完播率，品牌得到社交传播</div>
+<div style="color:var(--text3);font-size:.8em;margin-top:4px">示例：为什么99%的人都用错了这个AI功能</div>
+</div>
+<div style="background:rgba(79,195,247,.08);border-radius:12px;padding:16px;border:1px solid var(--border)">
+<div style="color:var(--blue);font-weight:700;margin-bottom:6px">🔥 工具实用 × 搜索长尾 × 品牌原生</div>
+<div style="color:var(--text2);font-size:.85em">「保姆级教程」型内容 — 用户拿到解决方案，平台拿到搜索流量，品牌拿到产品展示</div>
+<div style="color:var(--text3);font-size:.8em;margin-top:4px">示例：手把手教你用XX工具做XX（含品牌产品）</div>
+</div>
+<div style="background:rgba(0,214,143,.08);border-radius:12px;padding:16px;border:1px solid var(--border)">
+<div style="color:var(--green);font-weight:700;margin-bottom:6px">🔥 情感共鸣 × 互动深度 × 社区文化</div>
+<div style="color:var(--text2);font-size:.85em">「踩坑实录」型内容 — 用户产生共情，平台拿到评论弹幕，品牌拿到真实用户故事</div>
+<div style="color:var(--text3);font-size:.8em;margin-top:4px">示例：我踩了3个月的坑，终于搞明白了XX</div>
+</div>
+</div>
+</div>
+
+<!-- Tag Cloud -->
+<div class="card">
+<h3><span class="icon">🏷️</span> B站高权重关键词云</h3>
+<div class="tag-cloud">
+<span class="tag t0">干货</span><span class="tag t0">保姆级</span><span class="tag t1">实测</span><span class="tag t1">一口气看完</span><span class="tag t2">手把手</span><span class="tag t0">为什么</span><span class="tag t2">避坑指南</span><span class="tag t1">全网最全</span><span class="tag t3">沉浸式</span><span class="tag t2">从零开始</span><span class="tag t0">揭秘</span><span class="tag t3">终极方案</span><span class="tag t1">对比测评</span><span class="tag t2">99%不知道</span><span class="tag t3">宝藏工具</span><span class="tag t0">AI</span><span class="tag t1">效率翻倍</span><span class="tag t2">真实体验</span><span class="tag t3">极简教程</span>
+</div>
+<p style="color:var(--text3);font-size:.8em;margin-top:8px;text-align:center">⚠️ 避免「不看后悔」「震惊」等夸张词 — 算法降权 + 社区反感</p>
+</div>
+</div>
+
+<!-- Section 1: Radar -->
+<div class="section" id="sec1">
+<div class="section-title">竞争力雷达与指标体系</div>
+<div class="section-desc">7维竞争力模型 × 算法权重映射 — 知道平台看重什么，才能针对性发力</div>
+
+<div class="chart-row">
+<div class="chart-wrap">
+<h3>七维竞争力雷达图</h3>
+<canvas id="radarChart" height="320"></canvas>
+</div>
+<div class="chart-wrap">
+<h3>算法互动权重排序</h3>
+<canvas id="weightChart" height="320"></canvas>
+</div>
+</div>
+
+<!-- 7 dimensions detail -->
+<div class="card">
+<h3><span class="icon">📐</span> 七维竞争力详解</h3>
+<table class="matrix-table">
+<thead><tr><th>维度</th><th>权重</th><th>评估标准</th><th>对应算法指标</th></tr></thead>
+<tbody>
+<tr><td style="color:var(--pink);font-weight:600">标题吸引力</td><td>20%</td><td>数字/悬念/冲突/痛点词；20-30字；CTR预估</td><td>点击率(CTR)</td></tr>
+<tr><td style="color:var(--pink);font-weight:600">封面设计</td><td>18%</td><td>色彩对比、文字≤8字、手机端清晰、品牌一致</td><td>点击率(CTR)</td></tr>
+<tr><td style="color:var(--pink);font-weight:600">选题热度</td><td>17%</td><td>踩中热点/趋势话题；搜索量走势</td><td>播放分钟数</td></tr>
+<tr><td style="color:var(--pink);font-weight:600">前30秒留存</td><td>15%</td><td>Hook钩子/悬念/利益承诺；节奏感</td><td>完播率（首页推荐核心）</td></tr>
+<tr><td style="color:var(--pink);font-weight:600">标签SEO</td><td>10%</td><td>1核心+3长尾+2场景词；搜索排名优化</td><td>搜索流量权重</td></tr>
+<tr><td style="color:var(--pink);font-weight:600">互动设计</td><td>10%</td><td>弹幕引爆点、评论引导、三连时机</td><td>分享>投币>收藏>评论>弹幕>点赞</td></tr>
+<tr><td style="color:var(--pink);font-weight:600">发布时机</td><td>10%</td><td>晚20-21点最佳；避开头部发稿；频率稳定</td><td>发布后7天关键期</td></tr>
+</tbody>
+</table>
+</div>
+
+<!-- HKRR Theory -->
+<div class="card">
+<h3><span class="icon">🎬</span> HKRR 内容质检理论（影视飓风方法论）</h3>
+<p style="margin-bottom:14px;color:var(--text2)">任何一期视频至少满足以下三项之一才算合格，第四项必须满足：</p>
+<div class="card-grid">
+<div style="background:rgba(255,68,68,.08);border-radius:12px;padding:16px;border:1px solid rgba(255,68,68,.2)">
+<div style="color:var(--red);font-weight:700;font-size:1em">H — Happiness 快乐</div>
+<div style="color:var(--text2);font-size:.85em;margin-top:6px">观众看了会开心吗？有趣、好笑、轻松</div>
+</div>
+<div style="background:rgba(79,195,247,.08);border-radius:12px;padding:16px;border:1px solid rgba(79,195,247,.2)">
+<div style="color:var(--blue);font-weight:700;font-size:1em">K — Knowledge 知识</div>
+<div style="color:var(--text2);font-size:.85em;margin-top:6px">观众看了能学到东西吗？干货、新知、方法论</div>
+</div>
+<div style="background:rgba(0,214,143,.08);border-radius:12px;padding:16px;border:1px solid rgba(0,214,143,.2)">
+<div style="color:var(--green);font-weight:700;font-size:1em">R — Resonance 共鸣</div>
+<div style="color:var(--text2);font-size:.85em;margin-top:6px">观众看了会有情感共鸣吗？共情、认同、感动</div>
+</div>
+<div style="background:rgba(255,217,61,.08);border-radius:12px;padding:16px;border:1px solid rgba(255,217,61,.2)">
+<div style="color:var(--yellow);font-weight:700;font-size:1em">R — Rhythm 节奏 ⚠️必达</div>
+<div style="color:var(--text2);font-size:.85em;margin-top:6px">节奏能持续抓住注意力吗？爆点均匀分布、无冷区</div>
+</div>
+</div>
+<p style="color:var(--text3);font-size:.8em;margin-top:14px;text-align:center">用「时钟理论」检查：把视频拉成圆形，爆点应等分时钟，无超过2分钟的空白冷区</p>
+</div>
+
+<!-- Completion rate benchmarks -->
+<div class="card">
+<h3><span class="icon">📈</span> 关键数据基准</h3>
+<div class="card-grid">
+<div>
+<div class="bar-group"><div class="bar-label"><span>完播率基准</span><span style="color:var(--green)">优秀>50%</span></div><div class="bar-track"><div class="bar-fill green" style="width:50%"></div></div></div>
+<div class="bar-group"><div class="bar-label"><span>5-10分钟视频留存</span><span style="color:var(--blue)">31.5%</span></div><div class="bar-track"><div class="bar-fill blue" style="width:31.5%"></div></div></div>
+<div class="bar-group"><div class="bar-label"><span>教育科普类留存</span><span style="color:var(--green)">42.1%</span></div><div class="bar-track"><div class="bar-fill green" style="width:42.1%"></div></div></div>
+<div class="bar-group"><div class="bar-label"><span>开头15秒有承诺的留存提升</span><span style="color:var(--yellow)">+18%</span></div><div class="bar-track"><div class="bar-fill yellow" style="width:18%"></div></div></div>
+<div class="bar-group"><div class="bar-label"><span>留存提升10% → 曝光增长</span><span style="color:var(--pink)">+25%</span></div><div class="bar-track"><div class="bar-fill pink" style="width:25%"></div></div></div>
+</div>
+<div>
+<div class="bar-group"><div class="bar-label"><span>分享权重（算法最高）</span><span style="color:var(--pink)">100%</span></div><div class="bar-track"><div class="bar-fill pink" style="width:100%"></div></div></div>
+<div class="bar-group"><div class="bar-label"><span>投币权重</span><span style="color:var(--pink)">85%</span></div><div class="bar-track"><div class="bar-fill pink" style="width:85%"></div></div></div>
+<div class="bar-group"><div class="bar-label"><span>收藏权重</span><span style="color:var(--blue)">70%</span></div><div class="bar-track"><div class="bar-fill blue" style="width:70%"></div></div></div>
+<div class="bar-group"><div class="bar-label"><span>评论权重</span><span style="color:var(--blue)">55%</span></div><div class="bar-track"><div class="bar-fill blue" style="width:55%"></div></div></div>
+<div class="bar-group"><div class="bar-label"><span>播放量权重（最低）</span><span style="color:var(--text3)">15%</span></div><div class="bar-track"><div class="bar-fill" style="width:15%;background:var(--text3)"></div></div></div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Section 2: SOP -->
+<div class="section" id="sec2">
+<div class="section-title">全流程 SOP</div>
+<div class="section-desc">从选题到复盘，10步闭环 — 每一期视频都按这个流程跑，竞争力自然提升</div>
+
+<div class="sop-flow">
+<div class="sop-step">
+<h4>选题验证 — 确定这期视频有没有人想看</h4>
+<div class="details">
+<ul>
+<li>搜索联想词验证：输入核心词，看B站自动补全推荐是否匹配</li>
+<li>热门页趋势检查：目标分区近期是否有同类选题爆款</li>
+<li>三方交集检查：是否同时满足用户需求 + 算法指标 + 品牌价值</li>
+<li>HKRR预检：选题至少命中H/K/R一项</li>
+<li>差异化确认：同类视频已有哪些？你的角度有什么不同？</li>
+</ul>
+</div>
+</div>
+<div class="sop-arrow">↓</div>
+
+<div class="sop-step">
+<h4>标题公式 — 3秒内让用户决定点击</h4>
+<div class="details">
+<ul>
+<li>结构：[痛点/疑问] + [解决方案/亮点]</li>
+<li>必含元素：具体数字 / 疑问引导 / 动作导向 / 反常识（任选1-2）</li>
+<li>长度：20-30字，关键词前置</li>
+<li>验证：把标题给3个人看，问他们会不会点</li>
+<li>避坑：「震惊」「不看后悔」等夸张词 → 算法降权</li>
+</ul>
+</div>
+</div>
+<div class="sop-arrow">↓</div>
+
+<div class="sop-step">
+<h4>封面设计 — CTR的第一驱动力</h4>
+<div class="details">
+<ul>
+<li>尺寸：1146×717，1080P以上</li>
+<li>元素不超过3个：背景图 + 关键文字 + 头像/产品图</li>
+<li>文字≤8字，字号≥24号，鲜艳色（大红/大黄/亮蓝）</li>
+<li>科技类3选1：效果展示型 / 人物表情型 / 信息图型</li>
+<li>形成固定风格模板，让用户一眼认出你的频道</li>
+<li>封面制作提前到选题阶段，用AI批量生成参考图</li>
+</ul>
+</div>
+</div>
+<div class="sop-arrow">↓</div>
+
+<div class="sop-step">
+<h4>脚本结构 — 前30秒决定生死</h4>
+<div class="details">
+<ul>
+<li>00:00-00:30：Hook + 价值承诺（必须包含3要素：悬念/痛点/反常识 + 能得到什么 + 简洁介绍）</li>
+<li>00:30-02:00：问题背景设定（为什么这个话题重要）</li>
+<li>02:00-05:00：核心内容第一段（信息密度最高区间）</li>
+<li>05:00-06:00：节奏切换点（转场/幽默缓冲/弹幕互动）</li>
+<li>06:00-10:00：核心内容第二段（深入/实操/对比）</li>
+<li>10:00-11:00：总结 + 观点升华</li>
+<li>11:00-12:00：互动引导 + 预告下期</li>
+<li>每3-5分钟设1个「弹幕互动点」或「情绪转折点」</li>
+</ul>
+</div>
+</div>
+<div class="sop-arrow">↓</div>
+
+<div class="sop-step">
+<h4>节奏质检 — 时钟理论 + 零无聊时刻</h4>
+<div class="details">
+<ul>
+<li>时钟检查：把视频拉成圆形，爆点应等分时钟，无超过2分钟空白冷区</li>
+<li>MrBeast「零无聊时刻」原则：观众必须全程被吸引</li>
+<li>8分钟后设「能量脉冲」：反应镜头、数据弹窗、情绪节拍</li>
+<li>信息密度检查：每分钟是否有新信息/新视角？</li>
+<li>完播率锚点：教育类目标>42%，5-10分钟目标>31.5%</li>
+</ul>
+</div>
+</div>
+<div class="sop-arrow">↓</div>
+
+<div class="sop-step">
+<h4>互动设计 — 把权重最高的指标做上去</h4>
+<div class="details">
+<ul>
+<li><strong>分享（权重最高）</strong>：创造「社交货币」型内容，提供可直接复用的方法/工具/模板，制造「帮朋友」场景</li>
+<li><strong>投币（权重次高）</strong>：在内容高潮后自然引导「如果你也遇到过这个问题，投个币让我知道」</li>
+<li><strong>弹幕引爆</strong>：脚本预设3个弹幕引爆点（「你觉得哪个更好？」/「这里应该暂停」/「看到这你什么反应？」）</li>
+<li><strong>评论引导</strong>：置顶评论放讨论问题而非自我推广，发布后1小时内回复前10条</li>
+</ul>
+</div>
+</div>
+<div class="sop-arrow">↓</div>
+
+<div class="sop-step">
+<h4>标签SEO — 搜索流量的长尾引擎</h4>
+<div class="details">
+<ul>
+<li>标签公式：1个核心词 + 3个长尾词 + 2个场景词（共5-8个）</li>
+<li>核心关键词前置到标题前半段</li>
+<li>开头10秒内口播提及核心关键词</li>
+<li>简介包含3-5个相关关键词，不生硬堆砌</li>
+<li>每5分钟自然重复1次核心词（让算法确认匹配）</li>
+<li>发布后7天关键期：每天查看搜索来源数据，排名10-20名时通过互动提升权重</li>
+</ul>
+</div>
+</div>
+<div class="sop-arrow">↓</div>
+
+<div class="sop-step">
+<h4>发布策略 — 时机决定初始流量池</h4>
+<div class="details">
+<ul>
+<li>最佳发布时间：工作日晚20:00-21:00（用户有充足时间消费中长内容）</li>
+<li>次优时间：工作日7:00-9:00（通勤）、11:00-13:00（午休）</li>
+<li>避开头部UP主发稿时间（关注对标UP主的发布规律）</li>
+<li>发布频率：稳定比频率重要，起步每周1更</li>
+<li>发布后7天是排名关键期，当天评论占比49.54%</li>
+<li>跨平台联动：公众号→视频化→B站发布（降低生产成本）</li>
+</ul>
+</div>
+</div>
+<div class="sop-arrow">↓</div>
+
+<div class="sop-step">
+<h4>数据复盘 — 每期视频都是下一次的教材</h4>
+<div class="details">
+<ul>
+<li>核心看3个指标：完播率曲线（找到流失点）、互动率分布（哪个点引爆了弹幕）、搜索来源词（用户怎么找到你的）</li>
+<li>留存曲线标注：前5秒、30秒、3分钟、结尾 — 找到每个流失台阶的原因</li>
+<li>评论区关键词提取：用户讨论什么？什么让他们共鸣/不满？</li>
+<li>对标对比：同选题的竞品数据如何？你的差距在哪？</li>
+<li>改进记录：每期提炼1-2个具体改进点，下期必须执行</li>
+</ul>
+</div>
+</div>
+<div class="sop-arrow">↓</div>
+
+<div class="sop-step">
+<h4>迭代优化 — SOP本身的升级</h4>
+<div class="details">
+<ul>
+<li>每10期视频做一次SOP大复盘：标题公式是否需要更新？封面模板是否疲劳？</li>
+<li>每季度检查赛道趋势变化：新热点、算法调整、竞品变化</li>
+<li>建立选题库/创意库（飞书多维表格或Notion），积累可复用模板</li>
+<li>关注B站官方动态：算法调整公告、创作者政策更新、新功能上线</li>
+</ul>
+</div>
+</div>
+</div>
+
+<!-- Content template checklist -->
+<div class="card" style="margin-top:24px">
+<h3><span class="icon">📝</span> 单期视频发布前质检清单</h3>
+<div class="card-grid">
+<div>
+<div class="bar-group"><div class="bar-label"><span>□ 标题含具体数字/疑问/动作词？</span></div></div>
+<div class="bar-group"><div class="bar-label"><span>□ 封面文字≤8字、手机端清晰？</span></div></div>
+<div class="bar-group"><div class="bar-label"><span>□ 开头15秒有Hook + 价值承诺？</span></div></div>
+<div class="bar-group"><div class="bar-label"><span>□ HKRR至少命中一项？Rhythm必达？</span></div></div>
+<div class="bar-group"><div class="bar-label"><span>□ 时钟检查：爆点均匀、无>2分钟冷区？</span></div></div>
+</div>
+<div>
+<div class="bar-group"><div class="bar-label"><span>□ 设3个弹幕引爆点？</span></div></div>
+<div class="bar-group"><div class="bar-label"><span>□ 结尾有讨论问题引导评论？</span></div></div>
+<div class="bar-group"><div class="bar-label"><span>□ 标签5-8个（核心+长尾+场景）？</span></div></div>
+<div class="bar-group"><div class="bar-label"><span>□ 简介含3-5关键词？</span></div></div>
+<div class="bar-group"><div class="bar-label"><span>□ 发布时间在20:00-21:00？</span></div></div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Section 3: Weekly/Monthly -->
+<div class="section" id="sec3">
+<div class="section-title">周/月提升路线图</div>
+<div class="section-desc">不是所有事都能同时做 — 按周/月节奏逐步提升，每阶段聚焦1-2个维度</div>
+
+<!-- Weekly -->
+<div class="card">
+<h3><span class="icon">📅</span> 每周提升重点（8周循环）</h3>
+<p style="margin-bottom:16px;color:var(--text2)">每期视频聚焦1个维度深攻，8周后七维全面提升</p>
+<div class="timeline">
+<div class="timeline-item">
+<span class="week-badge">W1</span>
+<h4>标题公式实验</h4>
+<p>本周目标：验证3种标题公式，找到CTR最优组合</p>
+<div class="actions"><span class="action">同一选题做3个标题版本</span><span class="action">发布后对比CTR数据</span><span class="action">建立标题公式库</span></div>
+</div>
+<div class="timeline-item">
+<span class="week-badge">W2</span>
+<h4>封面模板固化</h4>
+<p>本周目标：确定1-2个封面模板，形成频道视觉识别</p>
+<div class="actions"><span class="action">设计3套封面模板</span><span class="action">对比点击率差异</span><span class="action">固化最优模板</span></div>
+</div>
+<div class="timeline-item">
+<span class="week-badge">W3</span>
+<h4>开头30秒优化</h4>
+<p>本周目标：把前5秒留存率提升到>90%</p>
+<div class="actions"><span class="action">尝试6种Hook类型</span><span class="action">录制多个开头AB测试</span><span class="action">复盘留存曲线前30秒</span></div>
+</div>
+<div class="timeline-item">
+<span class="week-badge">W4</span>
+<h4>节奏与信息密度</h4>
+<p>本周目标：消除所有>2分钟的冷区，爆点均匀分布</p>
+<div class="actions"><span class="action">时钟理论逐帧检查</span><span class="action">每3-5分钟设弹幕互动点</span><span class="action">8分钟后加能量脉冲</span></div>
+</div>
+<div class="timeline-item">
+<span class="week-badge">W5</span>
+<h4>互动设计升级</h4>
+<p>本周目标：投币率提升50%，分享数翻倍</p>
+<div class="actions"><span class="action">高潮点后自然引导三连</span><span class="action">设计3个弹幕引爆点</span><span class="action">置顶评论放争议小问题</span><span class="action">制造「帮朋友」分享场景</span></div>
+</div>
+<div class="timeline-item">
+<span class="week-badge">W6</span>
+<h4>标签SEO调优</h4>
+<p>本周目标：核心关键词搜索排名进入前10</p>
+<div class="actions"><span class="action">标签公式1核心+3长尾+2场景</span><span class="action">简介优化3-5关键词</span><span class="action">7天关键期每天看搜索数据</span><span class="action">跨平台搜索（百度）测试</span></div>
+</div>
+<div class="timeline-item">
+<span class="week-badge">W7</span>
+<h4>发布时机与频率</h4>
+<p>本周目标：找到你的频道最优发布时间窗口</p>
+<div class="actions"><span class="action">记录对标UP主发布规律</span><span class="action">A/B测试不同时段发布</span><span class="action">确立稳定更新频率</span><span class="action">发布后1小时回复评论</span></div>
+</div>
+<div class="timeline-item">
+<span class="week-badge">W8</span>
+<h4>复盘与迭代</h4>
+<p>本周目标：8周数据大盘点，升级SOP本身</p>
+<div class="actions"><span class="action">汇总8周7维数据趋势</span><span class="action">找出最有效&最薄弱维度</span><span class="action">更新SOP流程</span><span class="action">规划下一轮8周重点</span></div>
+</div>
+</div>
+</div>
+
+<!-- Monthly -->
+<div class="card">
+<h3><span class="icon">🗓️</span> 月度战略提升（6个月路线图）</h3>
+<p style="margin-bottom:16px;color:var(--text2)">周维度磨技能，月维度做战略 — 每月聚焦1个战略级目标</p>
+<div class="month-grid">
+<div class="month-card">
+<div class="month-label">M1 基础建设</div>
+<h4>搭建内容基础设施</h4>
+<ul>
+<li>建立选题库/创意库（飞书多维表格或Notion）</li>
+<li>确定频道定位和内容模板</li>
+<li>固化封面风格模板（2套）</li>
+<li>固化标题公式库（5个公式）</li>
+<li>搭建数据分析看板</li>
+</ul>
+<div style="color:var(--text3);font-size:.75em;margin-top:8px">🎯 产出：选题库50+选题、2套封面模板、5个标题公式</div>
+</div>
+<div class="month-card">
+<div class="month-label">M2 选题验证</div>
+<h4>找到你的爆款选题方向</h4>
+<ul>
+<li>发布8-12期视频，覆盖4个选题方向</li>
+<li>对比各方向的完播率/互动率/搜索流量</li>
+<li>确认P0选题方向（2-3个）</li>
+<li>放弃低效方向，聚焦优势赛道</li>
+<li>开始积累赛道知识储备</li>
+</ul>
+<div style="color:var(--text3);font-size:.75em;margin-top:8px">🎯 产出：确认核心选题方向、淘汰2个低效方向</div>
+</div>
+<div class="month-card">
+<div class="month-label">M3 完播率攻坚</div>
+<h4>把完播率拉到赛道平均水平以上</h4>
+<ul>
+<li>每期视频做留存曲线标注和冷区消除</li>
+<li>开头30秒做到3要素齐全</li>
+<li>时钟理论逐帧检查每期视频</li>
+<li>8分钟后能量脉冲设计</li>
+<li>信息密度监控：每分钟1个新信息点</li>
+</ul>
+<div style="color:var(--text3);font-size:.75em;margin-top:8px">🎯 产出：完播率>赛道平均值、前5秒留存>90%</div>
+</div>
+<div class="month-card">
+<div class="month-label">M4 互动率飞跃</div>
+<h4>把深度互动指标做上去</h4>
+<ul>
+<li>分享率翻倍：社交货币型选题 + 帮朋友场景</li>
+<li>投币率提升50%：高潮后自然引导</li>
+<li>评论量翻倍：争议小问题 + 1小时回复前10条</li>
+<li>弹幕密度提升：脚本预设3个引爆点</li>
+<li>评论区关键词月度分析</li>
+</ul>
+<div style="color:var(--text3);font-size:.75em;margin-top:8px">🎯 产出：互动率>赛道TOP20%水平</div>
+</div>
+<div class="month-card">
+<div class="month-label">M5 搜索长尾</div>
+<h4>建立搜索流量引擎</h4>
+<ul>
+<li>核心关键词搜索排名进前5</li>
+<li>长尾词布局：每期3个长尾标签</li>
+<li>简介SEO模板固化</li>
+<li>跨平台搜索流量（百度+B站）</li>
+<li>科技类「长销」特性最大化</li>
+</ul>
+<div style="color:var(--text3);font-size:.75em;margin-top:8px">🎯 产出：搜索流量占比>30%、核心词排名前5</div>
+</div>
+<div class="month-card">
+<div class="month-label">M6 商业化准备</div>
+<h4>从内容竞争力到商业竞争力</h4>
+<ul>
+<li>建立品牌合作案例库（3-5个成功案例）</li>
+<li>设计原生植入模板（产品融入叙事，不违和）</li>
+<li>制作商业合作数据包（频道画像+受众数据+案例）</li>
+<li>验证「内容即资产」的长期主义模式</li>
+<li>开始主动对接品牌方或加入MCN</li>
+</ul>
+<div style="color:var(--text3);font-size:.75em;margin-top:8px">🎯 产出：完成第一个品牌合作、商业化模板就位</div>
+</div>
+</div>
+</div>
+
+<!-- Monthly metrics -->
+<div class="card">
+<h3><span class="icon">📊</span> 月度关键指标追踪</h3>
+<table class="matrix-table">
+<thead><tr><th>指标</th><th>M1基准</th><th>M3目标</th><th>M6目标</th><th>赛道头部水平</th></tr></thead>
+<tbody>
+<tr><td>完播率</td><td>~20%</td><td>35%</td><td style="color:var(--green)">>42%</td><td>50%+</td></tr>
+<tr><td>互动率(转评赞藏/播放)</td><td>~3%</td><td>6%</td><td style="color:var(--green)">>10%</td><td>15%+</td></tr>
+<tr><td>投币率</td><td>~1%</td><td>2%</td><td style="color:var(--green)">>4%</td><td>6%+</td></tr>
+<tr><td>分享数/期</td><td>~50</td><td>150</td><td style="color:var(--green)">>500</td><td>1000+</td></tr>
+<tr><td>搜索流量占比</td><td>~10%</td><td>20%</td><td style="color:var(--green)">>30%</td><td>40%+</td></tr>
+<tr><td>粉丝增长/月</td><td>~200</td><td>800</td><td style="color:var(--green)">>3000</td><td>1万+</td></tr>
+<tr><td>更新频率</td><td>1期/周</td><td>1期/周</td><td>1-2期/周</td><td>2-3期/周</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+
+<!-- Section 4: Action Checklist -->
+<div class="section" id="sec4">
+<div class="section-title">可执行行动清单</div>
+<div class="section-desc">不是空洞的「提升质量」，而是每条都能今天就开始做的具体动作</div>
+
+<div class="checklist">
+<h3>🔴 本周立即执行（不需要任何额外资源）</h3>
+<div class="check-item" onclick="toggleCheck(this)">
+<div class="check-box"></div>
+<div class="check-text"><strong>修改最近1期视频的标题</strong> — 加具体数字或疑问句式，观察CTR变化 <span class="check-tag urgent">立即</span></div>
+</div>
+<div class="check-item" onclick="toggleCheck(this)">
+<div class="check-box"></div>
+<div class="check-text"><strong>在下一期视频开头15秒加Hook + 价值承诺</strong> — 用「你知道吗？XX竟然是这样的」开头 <span class="check-tag urgent">立即</span></div>
+</div>
+<div class="check-item" onclick="toggleCheck(this)">
+<div class="check-box"></div>
+<div class="check-text"><strong>发布后1小时内回复前10条评论</strong> — 置顶一个争议性小问题 <span class="check-tag urgent">立即</span></div>
+</div>
+<div class="check-item" onclick="toggleCheck(this)">
+<div class="check-box"></div>
+<div class="check-text"><strong>把发布时间调整为20:00-21:00</strong> — 如果当前不是这个时段 <span class="check-tag urgent">立即</span></div>
+</div>
+<div class="check-item" onclick="toggleCheck(this)">
+<div class="check-box"></div>
+<div class="check-text"><strong>查看创作中心留存曲线</strong> — 标注3个流失点，下期在这些位置加内容 <span class="check-tag urgent">立即</span></div>
+</div>
+</div>
+
+<div class="checklist">
+<h3>🔵 本月优化计划（需要少量准备）</h3>
+<div class="check-item" onclick="toggleCheck(this)">
+<div class="check-box"></div>
+<div class="check-text"><strong>设计2套封面模板</strong> — 效果展示型 + 信息图型，文字≤8字 <span class="check-tag week">本周</span></div>
+</div>
+<div class="check-item" onclick="toggleCheck(this)">
+<div class="check-box"></div>
+<div class="check-text"><strong>建立标题公式库</strong> — 收集5个爆款标题，拆解为可复用公式 <span class="check-tag week">本周</span></div>
+</div>
+<div class="check-item" onclick="toggleCheck(this)">
+<div class="check-box"></div>
+<div class="check-text"><strong>脚本中加入3个弹幕引爆点</strong> — 在2分/5分/8分处设互动设计 <span class="check-tag month">本月</span></div>
+</div>
+<div class="check-item" onclick="toggleCheck(this)">
+<div class="check-box"></div>
+<div class="check-text"><strong>标签从随意设改为公式化</strong> — 1核心+3长尾+2场景词 <span class="check-tag month">本月</span></div>
+</div>
+<div class="check-item" onclick="toggleCheck(this)">
+<div class="check-box"></div>
+<div class="check-text"><strong>用时钟理论检查每期视频节奏</strong> — 标注爆点位置，消除冷区 <span class="check-tag month">本月</span></div>
+</div>
+<div class="check-item" onclick="toggleCheck(this)">
+<div class="check-box"></div>
+<div class="check-text"><strong>建立选题库</strong> — 飞书多维表格或Notion，积累50+选题方向 <span class="check-tag month">本月</span></div>
+</div>
+<div class="check-item" onclick="toggleCheck(this)">
+<div class="check-box"></div>
+<div class="check-text"><strong>高潮点后自然引导三连</strong> — 「如果你也遇到过这个问题，投个币让我知道」 <span class="check-tag month">本月</span></div>
+</div>
+<div class="check-item" onclick="toggleCheck(this)">
+<div class="check-box"></div>
+<div class="check-text"><strong>每期视频简介加入3-5关键词</strong> — 自然描述而非堆砌 <span class="check-tag month">本月</span></div>
+</div>
+</div>
+
+<div class="checklist">
+<h3>🟠 季度战略调整（需要系统投入）</h3>
+<div class="check-item" onclick="toggleCheck(this)">
+<div class="check-box"></div>
+<div class="check-text"><strong>确认核心选题方向</strong> — 通过M2的数据对比，放弃低效方向聚焦优势赛道 <span class="check-tag month">季度</span></div>
+</div>
+<div class="check-item" onclick="toggleCheck(this)">
+<div class="check-box"></div>
+<div class="check-text"><strong>完成SOP大复盘并升级流程</strong> — 每10期做一次全维度回顾 <span class="check-tag month">季度</span></div>
+</div>
+<div class="check-item" onclick="toggleCheck(this)">
+<div class="check-box"></div>
+<div class="check-text"><strong>设计原生品牌植入模板</strong> — 产品融入叙事不违和，准备商业化 <span class="check-tag month">季度</span></div>
+</div>
+<div class="check-item" onclick="toggleCheck(this)">
+<div class="check-box"></div>
+<div class="check-text"><strong>关注B站算法/政策更新</strong> — 每季度检查推荐机制变化、创作者新政策 <span class="check-tag month">季度</span></div>
+</div>
+<div class="check-item" onclick="toggleCheck(this)">
+<div class="check-box"></div>
+<div class="check-text"><strong>开始对接品牌方或MCN</strong> — 制作商业合作数据包，验证长期主义模式 <span class="check-tag month">季度</span></div>
+</div>
+</div>
+</div>
+
+<!-- Footer -->
+<div class="footer">
+<p>B站视频竞争力 SOP 看板 · 2026年6月 · 数据来源：B站官方、知乎、花叔调研报告、CTR×B站消费趋势报告、影视飓风公开数据、MrBeast泄露文档</p>
+<p>参考：<a href="https://www.huasheng.ai/insights/bilibili-video-best-practices/">花叔B站方法论</a> · <a href="https://trends.bilibili.com/market_insight/122/">B站2026消费趋势</a> · <a href="https://zhuanlan.zhihu.com/p/1896701616075301265">B站算法详解</a></p>
+</div>
+
+</div>
+
+<script>
+// Tab switching
+const tabs = document.querySelectorAll('.nav-tab');
+const sections = document.querySelectorAll('.section');
+function switchTab(idx) {
+  tabs.forEach(t => t.classList.remove('active'));
+  sections.forEach(s => s.classList.remove('active'));
+  tabs[idx].classList.add('active');
+  sections[idx].classList.add('active');
+}
+
+// Checkbox toggle
+function toggleCheck(el) {
+  const box = el.querySelector('.check-box');
+  box.classList.toggle('checked');
+}
+
+// Radar Chart
+const radarCtx = document.getElementById('radarChart').getContext('2d');
+new Chart(radarCtx, {
+  type: 'radar',
+  data: {
+    labels: ['标题吸引力', '封面设计', '选题热度', '前30秒留存', '标签SEO', '互动设计', '发布时机'],
+    datasets: [
+      {
+        label: '当前水平',
+        data: [4, 3, 5, 3, 2, 3, 4],
+        borderColor: '#FB7299',
+        backgroundColor: 'rgba(251,114,153,0.15)',
+        pointBackgroundColor: '#FB7299',
+        borderWidth: 2
+      },
+      {
+        label: 'M3目标',
+        data: [7, 6, 6, 7, 5, 5, 6],
+        borderColor: '#4FC3F7',
+        backgroundColor: 'rgba(79,195,247,0.1)',
+        pointBackgroundColor: '#4FC3F7',
+        borderWidth: 2
+      },
+      {
+        label: '赛道头部',
+        data: [9, 9, 8, 9, 8, 8, 9],
+        borderColor: '#00D68F',
+        backgroundColor: 'rgba(0,214,143,0.05)',
+        pointBackgroundColor: '#00D68F',
+        borderWidth: 1,
+        borderDash: [4, 4]
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    scales: {
+      r: {
+        min: 0, max: 10,
+        ticks: { stepSize: 2, color: '#6868A8', backdropColor: 'transparent' },
+        grid: { color: 'rgba(255,255,255,0.08)' },
+        angleLines: { color: 'rgba(255,255,255,0.08)' },
+        pointLabels: { color: '#E8E8E8', font: { size: 11 } }
+      }
+    },
+    plugins: {
+      legend: { labels: { color: '#E8E8E8', font: { size: 11 } } }
+    }
+  }
+});
+
+// Weight Chart
+const weightCtx = document.getElementById('weightChart').getContext('2d');
+new Chart(weightCtx, {
+  type: 'bar',
+  data: {
+    labels: ['分享', '投币', '收藏', '评论', '弹幕', '点赞', '播放量'],
+    datasets: [{
+      label: '算法权重',
+      data: [100, 85, 70, 55, 40, 25, 15],
+      backgroundColor: [
+        '#FB7299', '#FF9EB5', '#4FC3F7', '#4FC3F7', '#FFD93D', '#A8A8B8', '#6868A8'
+      ],
+      borderRadius: 6,
+      barThickness: 28
+    }]
+  },
+  options: {
+    responsive: true,
+    indexAxis: 'y',
+    scales: {
+      x: { max: 100, grid: { color: 'rgba(255,255,255,0.06)' }, ticks: { color: '#A8A8B8' } },
+      y: { grid: { display: false }, ticks: { color: '#E8E8E8', font: { size: 12 } } }
+    },
+    plugins: {
+      legend: { display: false },
+      tooltip: { callbacks: { label: ctx => `权重：${ctx.raw}%` } }
+    }
+  }
+});
+</script>
+</body>
+</html>
